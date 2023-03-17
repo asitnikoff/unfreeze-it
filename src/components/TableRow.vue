@@ -6,9 +6,11 @@
       <ProblemCell
         v-for="problem in contestant.problems"
         :key="problem.id"
-        :problem="problem"
-        :contestant="contestant"
+        :problem="this.getProblem(problem)"
+        :contestantTitle="contestant.title"
         :contestType="contestType"
+        :currentContestant="getCurrentContestant(currentContestant)"
+        :currentProblem="getCurrentProblem(currentProblem)"
       ></ProblemCell>
     </div>
     <template v-if="contestType === 'ICPC'">
@@ -33,9 +35,29 @@ export default {
   props: {
     contestType: String,
     contestant: Object,
-    problems: Array,
+    currentContestant: Object,
+    currentProblem: Object,
   },
-  methods: {},
+  methods: {
+    getProblem(problem) {
+      return {
+        solved: problem.solved,
+        haveNextSubmission: problem.haveNextSubmission,
+        wasAttempt: problem.wasAttempt,
+        firstAccepted: problem.firstAccepted,
+        index: problem.index,
+        incorrectAttempts: problem.incorrectAttempts,
+      };
+    },
+    getCurrentContestant(contestant) {
+      return {
+        title: contestant.title,
+      };
+    },
+    getCurrentProblem(problem) {
+      return problem;
+    },
+  },
 };
 </script>
 

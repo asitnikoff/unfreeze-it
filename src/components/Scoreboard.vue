@@ -1,19 +1,21 @@
 <template>
   <div class="scoreboard">
-    <Header :contest="contest"></Header>
-    <transition-group name="flip-list">
+    <Header class="scoreboard__header"></Header>
+    <TransitionGroup name="flip-list" @enter="onEnter" @leave="onLeave">
       <TableRow
         v-for="[index, contestant] in contestants.entries()"
         :key="contestant.id"
         :contestant="contestant"
-        :problems="contest.problems"
+        :currentContestant="currentContestant"
+        :currentProblem="currentProblem"
+        @enter="onEnter"
         class="scoreboard__row"
         :class="{
           scoreboard__current_contestant: this.currentContestantIndex === index,
         }"
-        :contestType="contest.metadata.type"
+        :contestType="$store.getters.CONTEST.metadata.type"
       ></TableRow>
-    </transition-group>
+    </TransitionGroup>
   </div>
 </template>
 
@@ -24,18 +26,29 @@ import Header from "@/components/Header.vue";
 export default {
   data() {
     return {
-      contestants: this.contest.contestants,
+      contestants: this.$store.getters.CONTEST.contestants,
     };
   },
+  emits: ["enter", "leave"],
   props: {
-    contest: Object,
     currentContestantIndex: Number,
+    currentContestant: Object,
+    currentProblem: Object,
   },
   components: {
     TableRow,
     Header,
   },
-  methods: {},
+  methods: {
+    onEnter(el, done) {
+      console.log("enter: ", el);
+      done();
+    },
+    onLeave(el, done) {
+      console.log("leave: ", el);
+      done();
+    },
+  },
 };
 </script>
 

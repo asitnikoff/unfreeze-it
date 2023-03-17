@@ -4,8 +4,13 @@
       class="app__scoreboard"
       @keydown="handleKeyPress"
       tabindex="0"
-      :contest="contest"
       :currentContestantIndex="currentContestantIndex"
+      :currentContestant="
+        currentContestantIndex === -1 ? {} : contestants[currentContestantIndex]
+      "
+      :currentProblem="
+        currentProblemIndex === -1 ? {} : problems[currentProblemIndex]
+      "
     ></Scoreboard>
   </div>
 </template>
@@ -18,13 +23,17 @@ export default {
   name: "app",
   data() {
     return {
-      contest: {},
       currentContestantIndex: -1,
       currentProblemIndex: -1,
+      contestants: {},
+      submissions: {},
+      problems: {},
       allClicked: false,
+      isTransitionAnimation: false,
     };
   },
   created() {
+    document.title = "Scoreboard";
     this.getContestData();
   },
   components: {
@@ -34,14 +43,11 @@ export default {
     handleKeyPress(event) {
       switch (event.key) {
         case "n":
-          console.log(
-            "[dbg] ",
-            this.currentContestantIndex,
-            this.currentProblemIndex
-          );
+          if (this.isTransitionAnimation === true) {
+            break;
+          }
           if (this.currentProblemIndex !== -1) {
-            let contestant =
-              this.contest.contestants[this.currentContestantIndex];
+            let contestant = this.contestants[this.currentContestantIndex];
             let submission = this.getNextSubmission(
               contestant,
               contestant.problems[this.currentProblemIndex]
@@ -72,8 +78,7 @@ export default {
     revealAll() {
       while (this.currentContestantIndex !== -1) {
         if (this.currentProblemIndex !== -1) {
-          let contestant =
-            this.contest.contestants[this.currentContestantIndex];
+          let contestant = this.contestants[this.currentContestantIndex];
           let submission = this.getNextSubmission(
             contestant,
             contestant.problems[this.currentProblemIndex]
@@ -92,12 +97,12 @@ export default {
       }
     },
     getScoreboardBeforeFreeze() {
-      for (let submission of this.contest.submissions) {
+      for (let submission of this.submissions) {
         this.revealSubmission(submission, true);
       }
     },
     sortContestants() {
-      this.contest.contestants.sort((a, b) => {
+      this.contestants.sort((a, b) => {
         if (a.totalSolved === b.totalSolved) {
           return a.penalty - b.penalty;
         }
@@ -105,27 +110,44 @@ export default {
       });
     },
     updateContestantsPosition() {
-      for (let i = 0; i < this.contest.contestants.length; ++i) {
+      for (let i = 0; i < this.contestants.length; ++i) {
         if (
           i > 0 &&
-          this.contest.contestants[i].totalSolved ===
-            this.contest.contestants[i - 1].totalSolved &&
-          this.contest.contestants[i].penalty ===
-            this.contest.contestants[i - 1].penalty
+          this.contestants[i].totalSolved ===
+            this.contestants[i - 1].totalSolved &&
+          this.contestants[i].penalty === this.contestants[i - 1].penalty
         ) {
-          this.contest.contestants[i].position =
-            this.contest.contestants[i - 1].position;
+          this.contestants[i].position = this.contestants[i - 1].position;
         } else {
-          this.contest.contestants[i].position = i + 1;
+          this.contestants[i].position = i + 1;
         }
       }
     },
+    shiftContestant() {
+      let i = this.currentContestantIndex;
+      while (i > 0) {
+        if (
+          this.contestants[i].totalSolved >
+            this.contestants[i - 1].totalSolved ||
+          (this.contestants[i].totalSolved ===
+            this.contestants[i - 1].totalSolved &&
+            this.contestants[i].penalty < this.contestants[i - 1].penalty)
+        ) {
+          [this.contestants[i - 1], this.contestants[i]] = [
+            this.contestants[i],
+            this.contestants[i - 1],
+          ];
+        }
+        --i;
+      }
+    },
     updateScoreboard() {
-      this.sortContestants();
+      // this.sortContestants();
+      this.shiftContestant();
       this.updateContestantsPosition();
     },
     getNextSubmission(contestant, problem) {
-      return this.contest.submissions.find((submission) => {
+      return this.submissions.find((submission) => {
         return (
           submission.problemIndex === problem.index &&
           submission.contestantName === contestant.title &&
@@ -142,7 +164,7 @@ export default {
       }
     },
     initNextSubmissions() {
-      for (let contestant of this.contest.contestants) {
+      for (let contestant of this.contestants) {
         for (let problem of contestant.problems) {
           if (problem.solved === true) {
             continue;
@@ -154,29 +176,30 @@ export default {
     revealSubmission(submission, isFreeze = false) {
       if (submission === undefined) {
         submission = this.getNextSubmission(
-          this.contest.submissions,
-          this.contest.contestants[this.currentContestantIndex].title,
-          this.contest.contestants[this.currentContestantIndex].problems[
+          this.submissions,
+          this.contestants[this.currentContestantIndex].title,
+          this.contestants[this.currentContestantIndex].problems[
             this.currentProblemIndex
           ]
         );
       }
       // console.log("[dbgggg] ", submission);
       let contestantTitle = submission.contestantName;
-      let contestantIndex = this.contest.contestants.findIndex(
+      let contestantIndex = this.contestants.findIndex(
         (contestant) => contestant.title === contestantTitle
       );
-      let contestantProblemIndex = this.contest.contestants[
+      let contestantProblemIndex = this.contestants[
         contestantIndex
       ].problems.findIndex(
         (problem) => problem.index === submission.problemIndex
       );
-      this.contest.contestants[contestantIndex].problems[
+      this.contestants[contestantIndex].problems[
         contestantProblemIndex
       ].wasAttempt = true;
 
       if (
-        submission.timeSubmitted >= this.contest.metadata.freezeTime &&
+        submission.timeSubmitted >=
+          this.$store.getters.CONTEST.metadata.freezeTime &&
         isFreeze === true
       ) {
         return;
@@ -188,61 +211,59 @@ export default {
       ) {
         console.log("[submission dbg] ", submission);
       }
-      this.contest.contestants[contestantIndex].problems[
+      this.contestants[contestantIndex].problems[
         contestantProblemIndex
       ].lastSubmissionTime = submission.timeSubmitted;
       this.updateNextSubmission(
-        this.contest.contestants[contestantIndex],
-        this.contest.contestants[contestantIndex].problems[
-          contestantProblemIndex
-        ]
+        this.contestants[contestantIndex],
+        this.contestants[contestantIndex].problems[contestantProblemIndex]
       );
 
       if (contestantIndex === -1) {
         console.log("contestant bad :(");
       }
       if (
-        this.contest.contestants[contestantIndex].problems[
-          contestantProblemIndex
-        ].solved === false
+        this.contestants[contestantIndex].problems[contestantProblemIndex]
+          .solved === false
       ) {
         if (
-          this.contest.verdicts.withPenalty.includes(submission.verdict) ===
-          true
+          this.$store.getters.CONTEST.verdicts.withPenalty.includes(
+            submission.verdict
+          ) === true
         ) {
-          this.contest.contestants[contestantIndex].problems[
+          this.contestants[contestantIndex].problems[
             contestantProblemIndex
-          ].penalty += this.contest.metadata.penalty;
-          this.contest.contestants[contestantIndex].problems[
-            contestantProblemIndex
-          ].incorrectAttempts++;
+          ].penalty += this.$store.getters.CONTEST.metadata.penalty;
+          this.contestants[contestantIndex].problems[contestantProblemIndex]
+            .incorrectAttempts++;
         } else if (
-          this.contest.verdicts.accepted.includes(submission.verdict) === true
+          this.$store.getters.CONTEST.verdicts.accepted.includes(
+            submission.verdict
+          ) === true
         ) {
-          let globalProblem = this.contest.problems.find(
+          let globalProblem = this.problems.find(
             (problem) =>
               problem.index ===
-              this.contest.contestants[contestantIndex].problems[
-                contestantProblemIndex
-              ].index
+              this.contestants[contestantIndex].problems[contestantProblemIndex]
+                .index
           );
           if (globalProblem.solved === false) {
-            this.contest.contestants[contestantIndex].problems[
+            this.contestants[contestantIndex].problems[
               contestantProblemIndex
             ].firstAccepted = true;
             globalProblem.solved = true;
           }
-          this.contest.contestants[contestantIndex].problems[
+          this.contestants[contestantIndex].problems[
             contestantProblemIndex
           ].solved = true;
-          this.contest.contestants[contestantIndex].problems[
+          this.contestants[contestantIndex].problems[
             contestantProblemIndex
           ].penalty += Math.trunc(submission.timeSubmitted / 60);
-          this.contest.contestants[contestantIndex].penalty +=
-            this.contest.contestants[contestantIndex].problems[
+          this.contestants[contestantIndex].penalty +=
+            this.contestants[contestantIndex].problems[
               contestantProblemIndex
             ].penalty;
-          this.contest.contestants[contestantIndex].totalSolved++;
+          this.contestants[contestantIndex].totalSolved++;
         }
       }
     },
@@ -251,7 +272,7 @@ export default {
         return;
       }
       this.currentProblemIndex = -1;
-      for (let [index, problem] of this.contest.contestants[
+      for (let [index, problem] of this.contestants[
         this.currentContestantIndex
       ].problems.entries()) {
         if (problem.haveNextSubmission === true) {
@@ -261,17 +282,13 @@ export default {
       }
     },
     getContestData() {
-      this.contest = getSolveData();
-      for (let submission of this.contest.submissions) {
-        if (
-          submission.contestantName.includes("Михей") &&
-          submission.problemIndex === "E"
-        ) {
-          console.log("[init dbg] ", submission);
-        }
-      }
+      this.$store.commit("CONTEST", getSolveData());
+      console.log("[dbg] ", this.$store.getters.CONTEST);
+      this.contestants = this.$store.getters.CONTEST.contestants;
+      this.submissions = this.$store.getters.CONTEST.submissions;
+      this.problems = this.$store.getters.CONTEST.problems;
       this.getScoreboardBeforeFreeze();
-      this.currentContestantIndex = this.contest.contestants.length - 1;
+      this.currentContestantIndex = this.contestants.length - 1;
       this.sortContestants();
       this.updateContestantsPosition();
       this.initNextSubmissions();

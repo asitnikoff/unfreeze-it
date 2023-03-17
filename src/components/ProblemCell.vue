@@ -6,6 +6,7 @@
       problem__tried: this.problem.haveNextSubmission === true,
       problem__no_attempt: this.problem.wasAttempt === false,
       problem__first_accepted: this.problem.firstAccepted === true,
+      problem__highlight: this.isHighlighting,
     }"
   >
     <div class="problem__text">
@@ -16,10 +17,16 @@
 
 <script>
 export default {
+  data() {
+    return {
+      problemHighlightTimer: -1,
+      isHighlighting: false,
+    };
+  },
   props: {
     contestType: String,
     problem: Object,
-    contestant: Object,
+    contestantTitle: String,
   },
   methods: {
     getDisplayText() {
@@ -35,6 +42,26 @@ export default {
         return `${this.problem.index} - ${this.problem.incorrectAttempts}`;
       }
       return `${this.problem.index} - ${this.problem.points}`;
+    },
+  },
+  watch: {
+    currentProblem(newValue) {
+      if (
+        newValue.index === this.problem.index &&
+        this.$store.getters.CURRENT_CONTESTANT.title === this.contestantTitle
+      ) {
+        if (this.problemHighlightTimer === -1) {
+          this.$store.dispatch(
+            "SET_PROBLEM_HIGHLIGHT_TIMER",
+            setInterval(() => {
+              this.isHighlighting = !this.isHighlighting;
+            }, 1000)
+          );
+        }
+      } else {
+        this.$store.dispatch("CLEAR_PROBLEM_HIGHLIGHT_TIMER");
+        this.isHighlighting = false;
+      }
     },
   },
 };
@@ -61,5 +88,9 @@ export default {
 .problem__first_accepted {
   background-color: #009700;
   border: 3px solid #ff0000;
+}
+
+.problem__highlight {
+  border: 3px solid #1900ff;
 }
 </style>
