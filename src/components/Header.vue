@@ -2,14 +2,16 @@
   <div class="header">
     <div class="header__head">
       <div class="header__contest_title">
-        {{ $store.getters.CONTEST.metadata.title }}
+        {{ $store.getters["scoreboard/CONTEST"].metadata.title }}
       </div>
     </div>
     <div class="header__body">
       <div class="header__rank">Rank</div>
       <div class="header__contestant_name">Name</div>
       <div class="header__problems_title">Problems</div>
-      <template v-if="$store.getters.CONTEST.metadata.type === 'ICPC'">
+      <template
+        v-if="$store.getters['scoreboard/CONTEST'].metadata.type === 'ICPC'"
+      >
         <div class="header__icpc">
           <div class="header__solved">Solved</div>
           <div class="header__penalty">Penalty</div>
@@ -17,7 +19,7 @@
       </template>
       <div
         class="header__points"
-        v-if="$store.getters.CONTEST.metadata.type === 'IOI'"
+        v-if="$store.getters['scoreboard/CONTEST'].metadata.type === 'IOI'"
       >
         Points
       </div>

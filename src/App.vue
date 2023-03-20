@@ -47,6 +47,7 @@ export default {
             break;
           }
           if (this.currentProblemIndex !== -1) {
+            console.log("hi");
             let contestant = this.contestants[this.currentContestantIndex];
             let submission = this.getNextSubmission(
               contestant,
@@ -67,7 +68,6 @@ export default {
           this.findNextProblem();
           break;
         case "a":
-          console.log("'a' clicked");
           if (this.allClicked === false) {
             this.allClicked = true;
             this.revealAll();
@@ -157,11 +157,8 @@ export default {
     },
     updateNextSubmission(contestant, problem) {
       let submission = this.getNextSubmission(contestant, problem);
-      if (submission !== undefined && problem.solved === false) {
-        problem.haveNextSubmission = true;
-      } else {
-        problem.haveNextSubmission = false;
-      }
+      problem.haveNextSubmission =
+        submission !== undefined && problem.solved === false;
     },
     initNextSubmissions() {
       for (let contestant of this.contestants) {
@@ -199,7 +196,7 @@ export default {
 
       if (
         submission.timeSubmitted >=
-          this.$store.getters.CONTEST.metadata.freezeTime &&
+          this.$store.getters["scoreboard/CONTEST"].metadata.freezeTime &&
         isFreeze === true
       ) {
         return;
@@ -227,17 +224,18 @@ export default {
           .solved === false
       ) {
         if (
-          this.$store.getters.CONTEST.verdicts.withPenalty.includes(
-            submission.verdict
-          ) === true
+          this.$store.getters[
+            "scoreboard/CONTEST_VERDICTS"
+          ].withPenalty.includes(submission.verdict) === true
         ) {
           this.contestants[contestantIndex].problems[
             contestantProblemIndex
-          ].penalty += this.$store.getters.CONTEST.metadata.penalty;
+          ].penalty +=
+            this.$store.getters["scoreboard/CONTEST"].metadata.penalty;
           this.contestants[contestantIndex].problems[contestantProblemIndex]
             .incorrectAttempts++;
         } else if (
-          this.$store.getters.CONTEST.verdicts.accepted.includes(
+          this.$store.getters["scoreboard/CONTEST_VERDICTS"].accepted.includes(
             submission.verdict
           ) === true
         ) {
@@ -264,8 +262,16 @@ export default {
               contestantProblemIndex
             ].penalty;
           this.contestants[contestantIndex].totalSolved++;
+
+          this.banClickNext();
         }
       }
+    },
+    banClickNext() {
+      this.isTransitionAnimation = true;
+      setTimeout(() => {
+        this.isTransitionAnimation = false;
+      }, this.$store.getters["scoreboard/NEXT_CLICK_COOL_DOWN"] + 100);
     },
     findNextProblem() {
       if (this.currentContestantIndex === -1) {
@@ -282,11 +288,10 @@ export default {
       }
     },
     getContestData() {
-      this.$store.commit("CONTEST", getSolveData());
-      console.log("[dbg] ", this.$store.getters.CONTEST);
-      this.contestants = this.$store.getters.CONTEST.contestants;
-      this.submissions = this.$store.getters.CONTEST.submissions;
-      this.problems = this.$store.getters.CONTEST.problems;
+      this.$store.commit("scoreboard/CONTEST", getSolveData());
+      this.contestants = this.$store.getters["scoreboard/CONTEST_CONTESTANTS"];
+      this.submissions = this.$store.getters["scoreboard/CONTEST_SUBMISSIONS"];
+      this.problems = this.$store.getters["scoreboard/CONTEST_PROBLEMS"];
       this.getScoreboardBeforeFreeze();
       this.currentContestantIndex = this.contestants.length - 1;
       this.sortContestants();

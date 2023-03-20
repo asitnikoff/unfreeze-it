@@ -1,19 +1,23 @@
 <template>
-  <div class="scoreboard">
+  <div
+    class="scoreboard"
+    :style="{
+      '--click-cool-down': `${$store.getters['scoreboard/NEXT_CLICK_COOL_DOWN']}ms`,
+    }"
+  >
     <Header class="scoreboard__header"></Header>
-    <TransitionGroup name="flip-list" @enter="onEnter" @leave="onLeave">
+    <TransitionGroup name="flip-list">
       <TableRow
         v-for="[index, contestant] in contestants.entries()"
         :key="contestant.id"
         :contestant="contestant"
         :currentContestant="currentContestant"
         :currentProblem="currentProblem"
-        @enter="onEnter"
         class="scoreboard__row"
         :class="{
-          scoreboard__current_contestant: this.currentContestantIndex === index,
+          scoreboard__current_contestant: currentContestantIndex === index,
         }"
-        :contestType="$store.getters.CONTEST.metadata.type"
+        :contestType="$store.getters['scoreboard/CONTEST'].metadata.type"
       ></TableRow>
     </TransitionGroup>
   </div>
@@ -26,10 +30,9 @@ import Header from "@/components/Header.vue";
 export default {
   data() {
     return {
-      contestants: this.$store.getters.CONTEST.contestants,
+      contestants: this.$store.getters["scoreboard/CONTEST_CONTESTANTS"],
     };
   },
-  emits: ["enter", "leave"],
   props: {
     currentContestantIndex: Number,
     currentContestant: Object,
@@ -39,16 +42,7 @@ export default {
     TableRow,
     Header,
   },
-  methods: {
-    onEnter(el, done) {
-      console.log("enter: ", el);
-      done();
-    },
-    onLeave(el, done) {
-      console.log("leave: ", el);
-      done();
-    },
-  },
+  methods: {},
 };
 </script>
 
@@ -57,7 +51,7 @@ export default {
   margin-top: 10px;
 }
 .flip-list-move {
-  transition: transform 3s;
+  transition: transform var(--click-cool-down) ease-in-out;
 }
 
 .scoreboard__current_contestant {

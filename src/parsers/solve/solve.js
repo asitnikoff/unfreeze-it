@@ -1,8 +1,8 @@
-import problems from "./solve-problems.js";
-import participants from "./solve-participants.js";
-import solutions from "./solve-solutions.js";
+import solveProblems from "./solve-problems.js";
+import solveParticipants from "./solve-participants.js";
+import solveSolutions from "./solve-solutions.js";
 
-const contest = {
+const data = {
   metadata: {
     title: "Computer Science Cup: Квалификация",
     duration: 18000,
@@ -28,18 +28,18 @@ const contest = {
 const startTime = 1677924000;
 
 export default function getSolveData() {
-  parseProblems(contest);
-  parseContestants(contest);
-  if (contest.metadata.type === "ICPC") {
-    parseSubmissionsICPC(contest);
+  data.problems = parseProblems();
+  data.contestants = parseContestants();
+  if (data.metadata.type === "ICPC") {
+    data.submissions = parseSubmissionsICPC(data.verdicts);
   } else {
-    parseSubmmissionsIOI(contest);
+    data.submissions = parseSubmmissionsIOI();
   }
-  return contest;
+  return data;
 }
 
-function parseProblems(contest) {
-  contest.problems = problems
+function parseProblems() {
+  return solveProblems
     .map((problem, index) => {
       return {
         id: index,
@@ -51,17 +51,17 @@ function parseProblems(contest) {
     .filter((problem) => problem !== undefined);
 }
 
-function parseContestants(contest) {
-  contest.contestants = participants
+function parseContestants() {
+  return solveParticipants
     .map((participant, index) => {
       if (participant["kind"] !== "regular") {
         return undefined;
       }
 
-      let contestantProblemsData = contest.problems.map((problem, index) => {
+      let contestantProblemsData = solveProblems.map((problem, index) => {
         return {
           id: index,
-          index: problem.index,
+          index: problem.code,
           solved: false,
           penalty: 0,
           points: undefined,
@@ -86,14 +86,14 @@ function parseContestants(contest) {
     .filter((contestant) => contestant !== undefined);
 }
 
-function parseSubmissionsICPC(contest) {
-  solutions.sort((a, b) => a.create_time - b.create_time);
-  contest.submissions = solutions
+function parseSubmissionsICPC(verdicts) {
+  solveSolutions.sort((a, b) => a.create_time - b.create_time);
+  return solveSolutions
     .map((solution) => {
       if (solution.participant.kind !== "regular") {
         return undefined;
       }
-      if (contest.verdicts.withoutPenalty.includes(solution.report.verdict)) {
+      if (verdicts.withoutPenalty.includes(solution.report.verdict)) {
         return undefined;
       }
       return {
