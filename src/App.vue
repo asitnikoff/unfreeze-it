@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import Scoreboard from "@/components/Scoreboard.vue";
+import Scoreboard from "@/components/scoreboard/Scoreboard.vue";
 import getSolveData from "@/parsers/solve/solve.js";
 
 export default {
