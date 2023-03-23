@@ -1,9 +1,12 @@
 export default () => {
   return {
     contest: {},
+    problems: {},
+    contestants: {},
+    submissions: {},
+    verdicts: {},
     currentProblem: {},
     currentContestant: {},
-    currentContestantIndex: -1,
     currentProblemIndex: -1,
     problemHighlightTimer: -1,
     nextClickCoolDown: 1000,

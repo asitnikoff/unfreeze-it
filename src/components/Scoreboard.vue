@@ -11,13 +11,11 @@
         v-for="[index, contestant] in contestants.entries()"
         :key="contestant.id"
         :contestant="contestant"
-        :currentContestant="currentContestant"
-        :currentProblem="currentProblem"
         class="scoreboard__row"
         :class="{
           scoreboard__current_contestant: currentContestantIndex === index,
         }"
-        :contestType="$store.getters['scoreboard/CONTEST'].metadata.type"
+        :contestType="$store.getters['scoreboard/CONTEST'].type"
       ></TableRow>
     </TransitionGroup>
   </div>
@@ -26,21 +24,22 @@
 <script>
 import TableRow from "@/components/TableRow.vue";
 import Header from "@/components/Header.vue";
+import { mapGetters } from "vuex";
 
 export default {
-  data() {
-    return {
-      contestants: this.$store.getters["scoreboard/CONTEST_CONTESTANTS"],
-    };
-  },
   props: {
     currentContestantIndex: Number,
-    currentContestant: Object,
-    currentProblem: Object,
   },
   components: {
     TableRow,
     Header,
+  },
+  computed: {
+    ...mapGetters({
+      contestants: "scoreboard/CONTESTANTS",
+      currentContestant: "scoreboard/CURRENT_CONTESTANT",
+      currentProblem: "scoreboard/CURRENT_PROBLEM",
+    }),
   },
 };
 </script>

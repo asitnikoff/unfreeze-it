@@ -2,26 +2,23 @@ export default {
   CONTEST: (state) => {
     return state.contest;
   },
-  CONTEST_CONTESTANTS: (state) => {
-    return state.contest.contestants;
+  PROBLEMS: (state) => {
+    return state.problems;
   },
-  CONTEST_SUBMISSIONS: (state) => {
-    return state.contest.submissions;
+  CONTESTANTS: (state) => {
+    return state.contestants;
   },
-  CONTEST_PROBLEMS: (state) => {
-    return state.contest.problems;
+  SUBMISSIONS: (state) => {
+    return state.submissions;
   },
-  CONTEST_VERDICTS: (state) => {
-    return state.contest.verdicts;
+  VERDICTS: (state) => {
+    return state.verdicts;
   },
   CURRENT_PROBLEM: (state) => {
     return state.currentProblem;
   },
   CURRENT_CONTESTANT: (state) => {
     return state.currentContestant;
-  },
-  CURRENT_CONTESTANT_INDEX: (state) => {
-    return state.currentContestantIndex;
   },
   CURRENT_PROBLEM_INDEX: (state) => {
     return state.currentProblemIndex;

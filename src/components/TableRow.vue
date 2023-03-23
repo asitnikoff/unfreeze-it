@@ -9,8 +9,6 @@
         :problem="this.getProblem(problem)"
         :contestantTitle="contestant.title"
         :contestType="contestType"
-        :currentContestant="getCurrentContestant(currentContestant)"
-        :currentProblem="getCurrentProblem(currentProblem)"
       ></ProblemCell>
     </div>
     <template v-if="contestType === 'ICPC'">
@@ -35,8 +33,6 @@ export default {
   props: {
     contestType: String,
     contestant: Object,
-    currentContestant: Object,
-    currentProblem: Object,
   },
   methods: {
     getProblem(problem) {
@@ -48,14 +44,6 @@ export default {
         index: problem.index,
         incorrectAttempts: problem.incorrectAttempts,
       };
-    },
-    getCurrentContestant(contestant) {
-      return {
-        title: contestant.title,
-      };
-    },
-    getCurrentProblem(problem) {
-      return problem;
     },
   },
 };

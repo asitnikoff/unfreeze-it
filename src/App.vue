@@ -17,8 +17,14 @@
 
 <script>
 import Scoreboard from "@/components/Scoreboard.vue";
-import getSolveData from "@/parsers/solve/solve.js";
-import { mapGetters } from "vuex";
+import {
+  solveContest,
+  solveVerdicts,
+  getSolveProblems,
+  getSolveContestants,
+  getSolveSubmissionsICPC,
+} from "@/parsers/solve/solve.js";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "app",
@@ -61,8 +67,18 @@ export default {
             this.updateScoreboard();
           } else {
             this.currentContestantIndex--;
+            this.setCurrentContestant(
+              this.currentContestantIndex === -1
+                ? {}
+                : this.contestants[this.currentContestantIndex]
+            );
           }
           this.findNextProblem();
+          this.setCurrentProblem(
+            this.currentProblemIndex === -1
+              ? {}
+              : this.problems[this.currentProblemIndex]
+          );
           break;
         case "a":
           if (this.allClicked === false) {
@@ -192,18 +208,12 @@ export default {
       ].wasAttempt = true;
 
       if (
-        submission.timeSubmitted >= this.contest.metadata.freezeTime &&
+        submission.timeSubmitted >= this.contest.freezeTime &&
         isFreeze === true
       ) {
         return;
       }
 
-      if (
-        submission.contestantName.includes("Михей") &&
-        submission.problemIndex === "E"
-      ) {
-        console.log("[submission dbg] ", submission);
-      }
       this.contestants[contestantIndex].problems[
         contestantProblemIndex
       ].lastSubmissionTime = submission.timeSubmitted;
@@ -222,7 +232,7 @@ export default {
         if (this.verdicts.withPenalty.includes(submission.verdict) === true) {
           this.contestants[contestantIndex].problems[
             contestantProblemIndex
-          ].penalty += this.contest.metadata.penalty;
+          ].penalty += this.contest.penalty;
           this.contestants[contestantIndex].problems[contestantProblemIndex]
             .incorrectAttempts++;
         } else if (
@@ -277,21 +287,29 @@ export default {
       }
     },
     getContestData() {
-      this.$store.commit("scoreboard/CONTEST", getSolveData());
+      this.$store.commit("scoreboard/CONTEST", solveContest);
+      this.$store.commit("scoreboard/PROBLEMS", getSolveProblems());
+      this.$store.commit("scoreboard/CONTESTANTS", getSolveContestants());
+      this.$store.commit("scoreboard/SUBMISSIONS", getSolveSubmissionsICPC());
+      this.$store.commit("scoreboard/VERDICTS", solveVerdicts);
       this.getScoreboardBeforeFreeze();
       this.currentContestantIndex = this.contestants.length - 1;
       this.sortContestants();
       this.updateContestantsPosition();
       this.initNextSubmissions();
     },
+    ...mapActions({
+      setCurrentContestant: "scoreboard/SET_CURRENT_CONTESTANT",
+      setCurrentProblem: "scoreboard/SET_CURRENT_PROBLEM",
+    }),
   },
   computed: {
     ...mapGetters({
-      contestants: "scoreboard/CONTEST_CONTESTANTS",
-      submissions: "scoreboard/CONTEST_SUBMISSIONS",
-      problems: "scoreboard/CONTEST_PROBLEMS",
       contest: "scoreboard/CONTEST",
-      verdicts: "scoreboard/CONTEST_VERDICTS",
+      contestants: "scoreboard/CONTESTANTS",
+      submissions: "scoreboard/SUBMISSIONS",
+      problems: "scoreboard/PROBLEMS",
+      verdicts: "scoreboard/VERDICTS",
       nextClickCoolDown: "scoreboard/NEXT_CLICK_COOL_DOWN",
     }),
   },
