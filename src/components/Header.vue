@@ -9,18 +9,13 @@
       <div class="header__rank">Rank</div>
       <div class="header__contestant_name">Name</div>
       <div class="header__problems_title">Problems</div>
-      <template
-        v-if="$store.getters['scoreboard/CONTEST'].metadata.type === 'ICPC'"
-      >
+      <template v-if="contest.metadata.type === 'ICPC'">
         <div class="header__icpc">
           <div class="header__solved">Solved</div>
           <div class="header__penalty">Penalty</div>
         </div>
       </template>
-      <div
-        class="header__points"
-        v-if="$store.getters['scoreboard/CONTEST'].metadata.type === 'IOI'"
-      >
+      <div class="header__points" v-if="contest.metadata.type === 'IOI'">
         Points
       </div>
     </div>
@@ -28,7 +23,15 @@
 </template>
 
 <script>
-export default {};
+import { mapGetters } from "vuex";
+
+export default {
+  computed: {
+    ...mapGetters({
+      contest: "scoreboard/CONTEST",
+    }),
+  },
+};
 </script>
 
 <style scoped>

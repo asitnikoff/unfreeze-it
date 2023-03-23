@@ -24,16 +24,24 @@
 </template>
 
 <script>
-import data from "./data.js";
-import props from "./props.js";
-import components from "./components.js";
+import TableRow from "@/components/TableRow.vue";
+import Header from "@/components/Header.vue";
 
 export default {
   data() {
-    return data;
+    return {
+      contestants: this.$store.getters["scoreboard/CONTEST_CONTESTANTS"],
+    };
   },
-  props,
-  components,
+  props: {
+    currentContestantIndex: Number,
+    currentContestant: Object,
+    currentProblem: Object,
+  },
+  components: {
+    TableRow,
+    Header,
+  },
 };
 </script>
 

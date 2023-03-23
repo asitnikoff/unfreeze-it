@@ -26,14 +26,38 @@
 </template>
 
 <script>
-import components from "./components.js";
-import props from "./props.js";
-import methods from "./methods.js";
+import ProblemCell from "@/components/ProblemCell.vue";
 
 export default {
-  components,
-  props,
-  methods,
+  components: {
+    ProblemCell,
+  },
+  props: {
+    contestType: String,
+    contestant: Object,
+    currentContestant: Object,
+    currentProblem: Object,
+  },
+  methods: {
+    getProblem(problem) {
+      return {
+        solved: problem.solved,
+        haveNextSubmission: problem.haveNextSubmission,
+        wasAttempt: problem.wasAttempt,
+        firstAccepted: problem.firstAccepted,
+        index: problem.index,
+        incorrectAttempts: problem.incorrectAttempts,
+      };
+    },
+    getCurrentContestant(contestant) {
+      return {
+        title: contestant.title,
+      };
+    },
+    getCurrentProblem(problem) {
+      return problem;
+    },
+  },
 };
 </script>
 
