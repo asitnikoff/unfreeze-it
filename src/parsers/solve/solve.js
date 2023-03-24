@@ -174,6 +174,6 @@ export function getSolveSubmissionsICPC(verdicts) {
 //     .filter((submission) => submission !== undefined);
 // }
 
-function parseSubmmissionsIOI(contest) {
+function parseSubmmissionsIOI(verdicts) {
   // TODO: realize IOI submissions
 }
