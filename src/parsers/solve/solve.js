@@ -1,6 +1,7 @@
 import solveProblems from "./solve-problems.js";
 import solveParticipants from "./solve-participants.js";
 import solveSolutions from "./solve-solutions.js";
+export { solveVerdicts } from "./solve-verdicts.js";
 
 export const solveContest = {
   title: "Computer Science Cup: Квалификация",
@@ -8,17 +9,6 @@ export const solveContest = {
   freezeTime: 14400,
   type: "ICPC",
   penalty: 20,
-};
-export const solveVerdicts = {
-  accepted: ["accepted"],
-  withPenalty: [
-    "wrong_answer",
-    "runtime_error",
-    "time_limit_exceeded",
-    "memory_limit_exceeded",
-    "presentation_error",
-  ],
-  withoutPenalty: ["compilation_error"],
 };
 
 const startTime = 1677924000;
@@ -78,7 +68,7 @@ export function getSolveSubmissionsICPC(verdicts) {
       if (solution.participant.kind !== "regular") {
         return undefined;
       }
-      if (solveVerdicts.withoutPenalty.includes(solution.report.verdict)) {
+      if (verdicts.withoutPenalty.includes(solution.report.verdict)) {
         return undefined;
       }
       return {

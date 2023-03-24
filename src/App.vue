@@ -290,8 +290,11 @@ export default {
       this.$store.commit("scoreboard/CONTEST", solveContest);
       this.$store.commit("scoreboard/PROBLEMS", getSolveProblems());
       this.$store.commit("scoreboard/CONTESTANTS", getSolveContestants());
-      this.$store.commit("scoreboard/SUBMISSIONS", getSolveSubmissionsICPC());
       this.$store.commit("scoreboard/VERDICTS", solveVerdicts);
+      this.$store.commit(
+        "scoreboard/SUBMISSIONS",
+        getSolveSubmissionsICPC(verdicts)
+      );
       this.getScoreboardBeforeFreeze();
       this.currentContestantIndex = this.contestants.length - 1;
       this.sortContestants();
