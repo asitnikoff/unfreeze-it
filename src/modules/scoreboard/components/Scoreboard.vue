@@ -1,10 +1,5 @@
 <template>
-  <div
-    class="scoreboard"
-    :style="{
-      '--click-cool-down': `${$store.getters['scoreboard/NEXT_CLICK_COOL_DOWN']}ms`,
-    }"
-  >
+  <div class="scoreboard">
     <Header class="scoreboard__header"></Header>
     <TransitionGroup name="flip-list">
       <TableRow
@@ -21,14 +16,23 @@
   </div>
 </template>
 
-<script>
-import TableRow from "@/components/TableRow.vue";
-import Header from "@/components/Header.vue";
+<script lang="ts">
+import TableRow from "@/modules/scoreboard/components/TableRow.vue";
+import Header from "@/modules/scoreboard/components/Header.vue";
 import { mapGetters } from "vuex";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
+  data() {
+    return {
+      nextClickCoolDown: `${this.$store.getters["scoreboard/NEXT_CLICK_COOL_DOWN"]}ms`,
+    };
+  },
   props: {
-    currentContestantIndex: Number,
+    currentContestantIndex: {
+      type: Number,
+      required: true,
+    },
   },
   components: {
     TableRow,
@@ -41,15 +45,16 @@ export default {
       currentProblem: "scoreboard/CURRENT_PROBLEM",
     }),
   },
-};
+});
 </script>
 
 <style scoped>
 .scoreboard__row {
   margin-top: 10px;
 }
+
 .flip-list-move {
-  transition: transform var(--click-cool-down) ease-in-out;
+  transition: transform v-bind(nextClickCoolDown) ease-in-out;
 }
 
 .scoreboard__current_contestant {

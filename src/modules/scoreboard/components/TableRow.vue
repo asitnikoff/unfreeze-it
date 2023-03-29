@@ -5,8 +5,8 @@
     <div class="contestant__problems">
       <ProblemCell
         v-for="problem in contestant.problems"
-        :key="problem.id"
-        :problem="this.getProblem(problem)"
+        :key="problem.index"
+        :problem="problem"
         :contestantTitle="contestant.title"
         :contestType="contestType"
       ></ProblemCell>
@@ -23,30 +23,26 @@
   </div>
 </template>
 
-<script>
-import ProblemCell from "@/components/ProblemCell.vue";
+<script lang="ts">
+import ProblemCell from "@/modules/scoreboard/components/ProblemCell.vue";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   components: {
     ProblemCell,
   },
   props: {
-    contestType: String,
-    contestant: Object,
-  },
-  methods: {
-    getProblem(problem) {
-      return {
-        solved: problem.solved,
-        haveNextSubmission: problem.haveNextSubmission,
-        wasAttempt: problem.wasAttempt,
-        firstAccepted: problem.firstAccepted,
-        index: problem.index,
-        incorrectAttempts: problem.incorrectAttempts,
-      };
+    contestType: {
+      type: String,
+      required: true,
+    },
+    contestant: {
+      type: Object,
+      required: true,
     },
   },
-};
+  methods: {},
+});
 </script>
 
 <style scoped>

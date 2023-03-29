@@ -2,11 +2,11 @@
   <div
     class="problem"
     :class="{
-      problem__solved: this.problem.solved === true,
-      problem__tried: this.problem.haveNextSubmission === true,
-      problem__no_attempt: this.problem.wasAttempt === false,
-      problem__first_accepted: this.problem.firstAccepted === true,
-      problem__highlight: this.isHighlighting,
+      problem__solved: problem.solved === true,
+      problem__tried: problem.haveNextSubmission === true,
+      problem__no_attempt: problem.wasAttempt === false,
+      problem__first_accepted: problem.firstAccepted === true,
+      problem__highlight: isHighlighting,
     }"
   >
     <div class="problem__text">
@@ -15,20 +15,32 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent, type PropType } from "vue";
+import type ContestantProblem from "@/modules/scoreboard/models/ContestantProblem";
+
+export default defineComponent({
   data() {
     return {
       isHighlighting: false,
     };
   },
   props: {
-    contestType: String,
-    problem: Object,
-    contestantTitle: String,
+    contestType: {
+      type: String,
+      required: true,
+    },
+    problem: {
+      type: Object as PropType<ContestantProblem>,
+      required: true,
+    },
+    contestantTitle: {
+      type: String,
+      required: true,
+    },
   },
   methods: {
-    getDisplayText() {
+    getDisplayText(): string {
       if (this.problem.wasAttempt === false) {
         return `${this.problem.index}`;
       }
@@ -64,7 +76,7 @@ export default {
       }
     },
   },
-};
+});
 </script>
 
 <style scoped>

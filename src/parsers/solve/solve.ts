@@ -1,15 +1,21 @@
+import Contest from "@/modules/scoreboard/models/Contest";
+import Verdicts from "@/modules/scoreboard/models/Verdicts";
+import Problem from "@/modules/scoreboard/models/Problem";
+import Contestant from "@/modules/scoreboard/models/Contestant";
+import ContestantProblem from "@/modules/scoreboard/models/ContestantProblem";
+import Submission from "@/modules/scoreboard/models/Submission";
 import solveProblems from "./solve-problems.js";
 import solveParticipants from "./solve-participants.js";
 import solveSolutions from "./solve-solutions.js";
 
-export const solveContest = {
+export const solveContest: Contest = {
   title: "Computer Science Cup: Квалификация",
   duration: 18000,
   freezeTime: 14400,
   type: "ICPC",
   penalty: 20,
 };
-export const solveVerdicts = {
+export const solveVerdicts: Verdicts = {
   accepted: ["accepted"],
   withPenalty: [
     "wrong_answer",
@@ -21,9 +27,9 @@ export const solveVerdicts = {
   withoutPenalty: ["compilation_error"],
 };
 
-const startTime = 1677924000;
+const startTime: number = 1677924000;
 
-export function getSolveProblems() {
+export function getSolveProblems(): Array<Problem> {
   return solveProblems
     .map((problem, index) => {
       return {
@@ -36,42 +42,45 @@ export function getSolveProblems() {
     .filter((problem) => problem !== undefined);
 }
 
-export function getSolveContestants() {
+export function getSolveContestants(): Array<Contestant> {
   return solveParticipants
     .map((participant, index) => {
       if (participant["kind"] !== "regular") {
         return undefined;
       }
 
-      let contestantProblemsData = solveProblems.map((problem, index) => {
-        return {
-          id: index,
-          index: problem.code,
-          solved: false,
-          penalty: 0,
-          points: undefined,
-          firstAccepted: false,
-          wasAttempt: false,
-          incorrectAttempts: 0,
-          lastSubmissionTime: 0,
-          haveNextSubmission: false,
-        };
-      });
+      let contestantProblemsData: Array<ContestantProblem> = solveProblems.map(
+        (problem) => {
+          return {
+            index: problem.code,
+            solved: false,
+            penalty: 0,
+            points: undefined,
+            firstAccepted: false,
+            wasAttempt: false,
+            incorrectAttempts: 0,
+            lastSubmissionTime: 0,
+            haveNextSubmission: false,
+          };
+        }
+      );
 
       return {
         id: index,
         position: index,
-        title: participant.scope_user.title,
+        title: participant!.scope_user!.title,
         problems: contestantProblemsData,
         totalSolved: 0,
         penalty: 0,
         points: undefined,
       };
     })
-    .filter((contestant) => contestant !== undefined);
+    .filter(
+      (contestant?: Contestant) => contestant !== undefined
+    ) as Array<Contestant>;
 }
 
-export function getSolveSubmissionsICPC(verdicts) {
+export function getSolveSubmissionsICPC(): Array<Submission> {
   solveSolutions.sort((a, b) => a.create_time - b.create_time);
   return solveSolutions
     .map((solution) => {
@@ -82,15 +91,16 @@ export function getSolveSubmissionsICPC(verdicts) {
         return undefined;
       }
       return {
-        // timeSubmitted: Math.trunc((solution.create_time - startTime) / 60),
         timeSubmitted: solution.create_time - startTime,
-        contestantName: solution.participant.scope_user.title,
+        contestantName: solution!.participant!.scope_user!.title,
         problemIndex: solution.problem.code,
         verdict: solution.report.verdict,
         points: undefined,
       };
     })
-    .filter((submission) => submission !== undefined);
+    .filter(
+      (submission?: Submission) => submission !== undefined
+    ) as Array<Submission>;
 }
 
 // export default function getSolveData() {
@@ -174,6 +184,6 @@ export function getSolveSubmissionsICPC(verdicts) {
 //     .filter((submission) => submission !== undefined);
 // }
 
-function parseSubmmissionsIOI(contest) {
-  // TODO: realize IOI submissions
-}
+// function parseSubmmissionsIOI(contest) {
+//   // TODO: realize IOI submissions
+// }
