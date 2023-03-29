@@ -15,26 +15,29 @@
   </div>
 </template>
 
-<script>
-import Scoreboard from "@/components/Scoreboard.vue";
+<!--suppress JSUnusedGlobalSymbols -->
+<script lang="ts">
+import Scoreboard from "@/modules/scoreboard/components/Scoreboard.vue";
 import {
   solveContest,
   solveVerdicts,
   getSolveProblems,
   getSolveContestants,
   getSolveSubmissionsICPC,
-} from "@/parsers/solve/solve.js";
+} from "@/parsers/solve/solve";
 import { mapGetters, mapActions } from "vuex";
+import { defineComponent } from "vue";
+import Contestant from "@/modules/scoreboard/models/Contestant";
+import Submission from "@/modules/scoreboard/models/Submission";
+import Problem from "@/modules/scoreboard/models/Problem";
+import ContestantProblem from "@/modules/scoreboard/models/ContestantProblem";
 
-export default {
+export default defineComponent({
   name: "app",
   data() {
     return {
       currentContestantIndex: -1,
       currentProblemIndex: -1,
-      // contestants: {},
-      // submissions: {},
-      // problems: {},
       allClicked: false,
       isTransitionAnimation: false,
     };
@@ -47,7 +50,7 @@ export default {
     Scoreboard,
   },
   methods: {
-    handleKeyPress(event) {
+    handleKeyPress(event: KeyboardEvent) {
       switch (event.key) {
         case "n":
           if (this.isTransitionAnimation === true) {
@@ -114,12 +117,12 @@ export default {
         this.revealSubmission(submission, true);
       }
     },
-    sortContestants() {
-      this.contestants.sort((a, b) => {
+    sortContestantsICPC() {
+      this.contestants.sort((a: Contestant, b: Contestant) => {
         if (a.totalSolved === b.totalSolved) {
-          return a.penalty - b.penalty;
+          return a.penalty! - b.penalty!;
         }
-        return b.totalSolved - a.totalSolved;
+        return b.totalSolved! - a.totalSolved!;
       });
     },
     updateContestantsPosition() {
@@ -155,20 +158,20 @@ export default {
       }
     },
     updateScoreboard() {
-      // this.sortContestants();
+      // this.sortContestantsICPC();
       this.shiftContestant();
       this.updateContestantsPosition();
     },
-    getNextSubmission(contestant, problem) {
-      return this.submissions.find((submission) => {
+    getNextSubmission(contestant: Contestant, contestantProblem: ContestantProblem) {
+      return this.submissions.find((submission: Submission) => {
         return (
-          submission.problemIndex === problem.index &&
+          submission.problemIndex === contestantProblem.index &&
           submission.contestantName === contestant.title &&
-          submission.timeSubmitted > problem.lastSubmissionTime
+          submission.timeSubmitted > contestantProblem.lastSubmissionTime
         );
       });
     },
-    updateNextSubmission(contestant, problem) {
+    updateNextSubmission(contestant: Contestant, problem: ContestantProblem) {
       let submission = this.getNextSubmission(contestant, problem);
       problem.haveNextSubmission =
         submission !== undefined && problem.solved === false;
@@ -183,32 +186,30 @@ export default {
         }
       }
     },
-    revealSubmission(submission, isFreeze = false) {
+    revealSubmission(submission?: Submission, isFreeze: boolean = false) {
       if (submission === undefined) {
         submission = this.getNextSubmission(
           this.submissions,
-          this.contestants[this.currentContestantIndex].title,
           this.contestants[this.currentContestantIndex].problems[
             this.currentProblemIndex
           ]
         );
       }
-      // console.log("[dbgggg] ", submission);
-      let contestantTitle = submission.contestantName;
+      let contestantTitle = submission!.contestantName;
       let contestantIndex = this.contestants.findIndex(
-        (contestant) => contestant.title === contestantTitle
+        (contestant: Contestant) => contestant.title === contestantTitle
       );
       let contestantProblemIndex = this.contestants[
         contestantIndex
       ].problems.findIndex(
-        (problem) => problem.index === submission.problemIndex
+        (problem: Problem) => problem.index === submission!.problemIndex
       );
       this.contestants[contestantIndex].problems[
         contestantProblemIndex
       ].wasAttempt = true;
 
       if (
-        submission.timeSubmitted >= this.contest.freezeTime &&
+        submission!.timeSubmitted >= this.contest.freezeTime &&
         isFreeze === true
       ) {
         return;
@@ -216,7 +217,7 @@ export default {
 
       this.contestants[contestantIndex].problems[
         contestantProblemIndex
-      ].lastSubmissionTime = submission.timeSubmitted;
+      ].lastSubmissionTime = submission!.timeSubmitted;
       this.updateNextSubmission(
         this.contestants[contestantIndex],
         this.contestants[contestantIndex].problems[contestantProblemIndex]
@@ -229,17 +230,17 @@ export default {
         this.contestants[contestantIndex].problems[contestantProblemIndex]
           .solved === false
       ) {
-        if (this.verdicts.withPenalty.includes(submission.verdict) === true) {
+        if (this.verdicts.withPenalty.includes(submission!.verdict) === true) {
           this.contestants[contestantIndex].problems[
             contestantProblemIndex
           ].penalty += this.contest.penalty;
           this.contestants[contestantIndex].problems[contestantProblemIndex]
             .incorrectAttempts++;
         } else if (
-          this.verdicts.accepted.includes(submission.verdict) === true
+          this.verdicts.accepted.includes(submission!.verdict) === true
         ) {
           let globalProblem = this.problems.find(
-            (problem) =>
+            (problem: Problem) =>
               problem.index ===
               this.contestants[contestantIndex].problems[contestantProblemIndex]
                 .index
@@ -255,7 +256,7 @@ export default {
           ].solved = true;
           this.contestants[contestantIndex].problems[
             contestantProblemIndex
-          ].penalty += Math.trunc(submission.timeSubmitted / 60);
+          ].penalty += Math.trunc(submission!.timeSubmitted / 60);
           this.contestants[contestantIndex].penalty +=
             this.contestants[contestantIndex].problems[
               contestantProblemIndex
@@ -294,7 +295,7 @@ export default {
       this.$store.commit("scoreboard/VERDICTS", solveVerdicts);
       this.getScoreboardBeforeFreeze();
       this.currentContestantIndex = this.contestants.length - 1;
-      this.sortContestants();
+      this.sortContestantsICPC();
       this.updateContestantsPosition();
       this.initNextSubmissions();
     },
@@ -313,7 +314,7 @@ export default {
       nextClickCoolDown: "scoreboard/NEXT_CLICK_COOL_DOWN",
     }),
   },
-};
+});
 </script>
 
 <style>
