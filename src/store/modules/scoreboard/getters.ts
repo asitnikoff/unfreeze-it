@@ -1,4 +1,5 @@
 import { GetterTree } from "vuex";
+import * as types from "@/store/modules/scoreboard/types/getter-types";
 import Contest from "@/modules/scoreboard/models/Contest";
 import Problem from "@/modules/scoreboard/models/Problem";
 import Contestant from "@/modules/scoreboard/models/Contestant";
@@ -7,72 +8,36 @@ import Verdicts from "@/modules/scoreboard/models/Verdicts";
 import ScoreboardState from "@/store/modules/scoreboard/models/ScoreboardState";
 
 const getters: GetterTree<ScoreboardState, any> = {
-  CONTEST: (state): Contest => {
+  [types.CONTEST](state): Contest  {
     return state.contest;
   },
-  PROBLEMS: (state): Array<Problem> => {
+  [types.PROBLEMS](state): Array<Problem>  {
     return state.problems;
   },
-  CONTESTANTS: (state): Array<Contestant> => {
+  [types.CONTESTANTS](state): Array<Contestant>  {
     return state.contestants;
   },
-  SUBMISSIONS: (state): Array<Submission> => {
+  [types.SUBMISSIONS](state): Array<Submission>  {
     return state.submissions;
   },
-  VERDICTS: (state): Verdicts => {
+  [types.VERDICTS](state): Verdicts  {
     return state.verdicts;
   },
-  CURRENT_PROBLEM: (state): Problem => {
+  [types.CURRENT_PROBLEM](state): Problem  {
     return state.currentProblem;
   },
-  CURRENT_CONTESTANT: (state): Contestant => {
+  [types.CURRENT_CONTESTANT](state): Contestant  {
     return state.currentContestant;
   },
-  CURRENT_PROBLEM_INDEX: (state): number => {
+  [types.CURRENT_PROBLEM_INDEX](state): number  {
     return state.currentProblemIndex;
   },
-  PROBLEM_HIGHLIGHT_TIMER: (state): number => {
+  [types.PROBLEM_HIGHLIGHT_TIMER](state): number {
     return state.problemHighlightTimer;
   },
-  CLICK_COOL_DOWN: (state): number => {
+  [types.CLICK_COOL_DOWN](state): number {
     return state.clickCoolDown;
   },
 };
 
 export default getters;
-
-
-/*
-export default {
-  CONTEST: (state) => {
-    return state.contest;
-  },
-  PROBLEMS: (state) => {
-    return state.problems;
-  },
-  CONTESTANTS: (state) => {
-    return state.contestants;
-  },
-  SUBMISSIONS: (state) => {
-    return state.submissions;
-  },
-  VERDICTS: (state) => {
-    return state.verdicts;
-  },
-  CURRENT_PROBLEM: (state) => {
-    return state.currentProblem;
-  },
-  CURRENT_CONTESTANT: (state) => {
-    return state.currentContestant;
-  },
-  CURRENT_PROBLEM_INDEX: (state) => {
-    return state.currentProblemIndex;
-  },
-  PROBLEM_HIGHLIGHT_TIMER: (state) => {
-    return state.problemHighlightTimer;
-  },
-  NEXT_CLICK_COOL_DOWN: (state) => {
-    return state.clickCoolDown;
-  },
-};
-*/
