@@ -21,7 +21,7 @@ const state: ScoreboardState = {
     clickCoolDown: 1000,
 };
 
-const scoreboard: Module<any, any> = {
+const scoreboard: Module<ScoreboardState, any> = {
   namespaced: true,
   state,
   getters,

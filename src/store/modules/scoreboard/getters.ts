@@ -1,5 +1,5 @@
 import { GetterTree } from "vuex";
-import * as types from "@/store/modules/scoreboard/types/getter-types";
+import ScoreboardGetterEnum from "@/store/modules/scoreboard/types/getter-types";
 import Contest from "@/modules/scoreboard/models/Contest";
 import Problem from "@/modules/scoreboard/models/Problem";
 import Contestant from "@/modules/scoreboard/models/Contestant";
@@ -8,34 +8,34 @@ import Verdicts from "@/modules/scoreboard/models/Verdicts";
 import ScoreboardState from "@/store/modules/scoreboard/models/ScoreboardState";
 
 const getters: GetterTree<ScoreboardState, any> = {
-  [types.CONTEST](state): Contest  {
+  [ScoreboardGetterEnum.GET_CONTEST](state): Contest  {
     return state.contest;
   },
-  [types.PROBLEMS](state): Array<Problem>  {
+  [ScoreboardGetterEnum.GET_PROBLEMS](state): Array<Problem>  {
     return state.problems;
   },
-  [types.CONTESTANTS](state): Array<Contestant>  {
+  [ScoreboardGetterEnum.GET_CONTESTANTS](state): Array<Contestant>  {
     return state.contestants;
   },
-  [types.SUBMISSIONS](state): Array<Submission>  {
+  [ScoreboardGetterEnum.GET_SUBMISSIONS](state): Array<Submission>  {
     return state.submissions;
   },
-  [types.VERDICTS](state): Verdicts  {
+  [ScoreboardGetterEnum.GET_VERDICTS](state): Verdicts  {
     return state.verdicts;
   },
-  [types.CURRENT_PROBLEM](state): Problem  {
+  [ScoreboardGetterEnum.GET_CURRENT_PROBLEM](state): Problem  {
     return state.currentProblem;
   },
-  [types.CURRENT_CONTESTANT](state): Contestant  {
+  [ScoreboardGetterEnum.GET_CURRENT_CONTESTANT](state): Contestant  {
     return state.currentContestant;
   },
-  [types.CURRENT_PROBLEM_INDEX](state): number  {
+  [ScoreboardGetterEnum.GET_CURRENT_PROBLEM_INDEX](state): number  {
     return state.currentProblemIndex;
   },
-  [types.PROBLEM_HIGHLIGHT_TIMER](state): number {
+  [ScoreboardGetterEnum.GET_PROBLEM_HIGHLIGHT_TIMER](state): number {
     return state.problemHighlightTimer;
   },
-  [types.CLICK_COOL_DOWN](state): number {
+  [ScoreboardGetterEnum.GET_CLICK_COOL_DOWN](state): number {
     return state.clickCoolDown;
   },
 };

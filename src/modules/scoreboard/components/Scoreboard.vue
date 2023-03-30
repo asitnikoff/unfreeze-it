@@ -10,7 +10,7 @@
         :class="{
           scoreboard__current_contestant: currentContestantIndex === index,
         }"
-        :contestType="$store.getters['scoreboard/CONTEST'].type"
+        :contestType=contestType
       ></TableRow>
     </TransitionGroup>
   </div>
@@ -21,13 +21,9 @@ import TableRow from "@/modules/scoreboard/components/TableRow.vue";
 import Header from "@/modules/scoreboard/components/Header.vue";
 import { mapGetters } from "vuex";
 import { defineComponent } from "vue";
+import ScoreboardGetterEnum from "@/store/modules/scoreboard/types/getter-types";
 
 export default defineComponent({
-  data() {
-    return {
-      clickCoolDown: `${this.$store.getters["scoreboard/CLICK_COOL_DOWN"]}ms`,
-    };
-  },
   props: {
     currentContestantIndex: {
       type: Number,
@@ -39,10 +35,18 @@ export default defineComponent({
     Header,
   },
   computed: {
-    ...mapGetters({
-      contestants: "scoreboard/CONTESTANTS",
-      currentContestant: "scoreboard/CURRENT_CONTESTANT",
-      currentProblem: "scoreboard/CURRENT_PROBLEM",
+    contestType() {
+      return this.contest.type;
+    },
+    contestantMoveDuration() {
+      return `${this.clickCoolDown}ms`;
+    },
+    ...mapGetters('scoreboard', {
+      contest: ScoreboardGetterEnum.GET_CONTEST,
+      clickCoolDown: ScoreboardGetterEnum.GET_CLICK_COOL_DOWN,
+      contestants: ScoreboardGetterEnum.GET_CONTESTANTS,
+      currentContestant: ScoreboardGetterEnum.GET_CURRENT_CONTESTANT,
+      currentProblem: ScoreboardGetterEnum.GET_CURRENT_PROBLEM,
     }),
   },
 });
@@ -54,7 +58,7 @@ export default defineComponent({
 }
 
 .flip-list-move {
-  transition: transform v-bind(clickCoolDown) ease-in-out;
+  transition: transform v-bind(contestantMoveDuration) ease-in-out;
 }
 
 .scoreboard__current_contestant {
