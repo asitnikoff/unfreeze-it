@@ -15,8 +15,9 @@
   </div>
 </template>
 
-<!--suppress JSUnusedGlobalSymbols -->
 <script lang="ts">
+import ScoreboardActionEnum from "@/store/modules/scoreboard/types/action-types";
+import ScoreboardGetterEnum from "@/store/modules/scoreboard/types/getter-types";
 import Scoreboard from "@/modules/scoreboard/components/Scoreboard.vue";
 import {
   solveContest,
@@ -288,30 +289,35 @@ export default defineComponent({
       }
     },
     getContestData() {
-      this.$store.commit("scoreboard/CONTEST", solveContest);
-      this.$store.commit("scoreboard/PROBLEMS", getSolveProblems());
-      this.$store.commit("scoreboard/CONTESTANTS", getSolveContestants());
-      this.$store.commit("scoreboard/SUBMISSIONS", getSolveSubmissionsICPC());
-      this.$store.commit("scoreboard/VERDICTS", solveVerdicts);
+      this.setContest(solveContest);
+      this.setProblems(getSolveProblems());
+      this.setContestants(getSolveContestants());
+      this.setSubmissions(getSolveSubmissionsICPC());
+      this.setVerdicts(solveVerdicts);
       this.getScoreboardBeforeFreeze();
       this.currentContestantIndex = this.contestants.length - 1;
       this.sortContestantsICPC();
       this.updateContestantsPosition();
       this.initNextSubmissions();
     },
-    ...mapActions({
-      setCurrentContestant: "scoreboard/SET_CURRENT_CONTESTANT",
-      setCurrentProblem: "scoreboard/SET_CURRENT_PROBLEM",
+    ...mapActions('scoreboard', {
+      setCurrentContestant: ScoreboardActionEnum.SET_CURRENT_CONTESTANT,
+      setCurrentProblem: ScoreboardActionEnum.SET_CURRENT_PROBLEM,
+      setContest: ScoreboardActionEnum.SET_CONTEST,
+      setProblems: ScoreboardActionEnum.SET_PROBLEMS,
+      setContestants: ScoreboardActionEnum.SET_CONTESTANTS,
+      setSubmissions: ScoreboardActionEnum.SET_SUBMISSIONS,
+      setVerdicts: ScoreboardActionEnum.SET_VERDICTS,
     }),
   },
   computed: {
-    ...mapGetters({
-      contest: "scoreboard/CONTEST",
-      contestants: "scoreboard/CONTESTANTS",
-      submissions: "scoreboard/SUBMISSIONS",
-      problems: "scoreboard/PROBLEMS",
-      verdicts: "scoreboard/VERDICTS",
-      clickCoolDown: "scoreboard/CLICK_COOL_DOWN",
+    ...mapGetters('scoreboard', {
+      contest: ScoreboardGetterEnum.GET_CONTEST,
+      contestants: ScoreboardGetterEnum.GET_CONTESTANTS,
+      submissions: ScoreboardGetterEnum.GET_SUBMISSIONS,
+      problems: ScoreboardGetterEnum.GET_PROBLEMS,
+      verdicts: ScoreboardGetterEnum.GET_VERDICTS,
+      clickCoolDown: ScoreboardGetterEnum.GET_CLICK_COOL_DOWN,
     }),
   },
 });

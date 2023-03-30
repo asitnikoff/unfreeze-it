@@ -23,11 +23,12 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { mapGetters } from "vuex";
+import ScoreboardGetterEnum from "@/store/modules/scoreboard/types/getter-types";
 
 export default defineComponent({
   computed: {
-    ...mapGetters({
-      contest: "scoreboard/CONTEST",
+    ...mapGetters('scoreboard', {
+      contest: ScoreboardGetterEnum.GET_CONTEST,
     }),
   },
 });
