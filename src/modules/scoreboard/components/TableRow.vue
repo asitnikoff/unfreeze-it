@@ -25,7 +25,8 @@
 
 <script lang="ts">
 import ProblemCell from "@/modules/scoreboard/components/ProblemCell.vue";
-import { defineComponent } from "vue";
+import Contestant from "@/modules/scoreboard/models/Contestant";
+import {defineComponent, type PropType} from "vue";
 
 export default defineComponent({
   components: {
@@ -37,7 +38,7 @@ export default defineComponent({
       required: true,
     },
     contestant: {
-      type: Object,
+      type: Object as PropType<Contestant>,
       required: true,
     },
   },

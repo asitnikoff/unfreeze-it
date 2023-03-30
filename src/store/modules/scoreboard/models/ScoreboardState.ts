@@ -14,5 +14,5 @@ export default interface ScoreboardState {
     currentContestant: Contestant;
     currentProblemIndex: number;
     problemHighlightTimer: number;
-    nextClickCoolDown: number;
+    clickCoolDown: number;
 };

@@ -271,7 +271,7 @@ export default defineComponent({
       this.isTransitionAnimation = true;
       setTimeout(() => {
         this.isTransitionAnimation = false;
-      }, this.nextClickCoolDown + 100);
+      }, this.clickCoolDown + 100);
     },
     findNextProblem() {
       if (this.currentContestantIndex === -1) {
@@ -311,7 +311,7 @@ export default defineComponent({
       submissions: "scoreboard/SUBMISSIONS",
       problems: "scoreboard/PROBLEMS",
       verdicts: "scoreboard/VERDICTS",
-      nextClickCoolDown: "scoreboard/NEXT_CLICK_COOL_DOWN",
+      clickCoolDown: "scoreboard/CLICK_COOL_DOWN",
     }),
   },
 });

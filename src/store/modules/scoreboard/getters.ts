@@ -34,8 +34,8 @@ const getters: GetterTree<ScoreboardState, any> = {
   PROBLEM_HIGHLIGHT_TIMER: (state): number => {
     return state.problemHighlightTimer;
   },
-  NEXT_CLICK_COOL_DOWN: (state): number => {
-    return state.nextClickCoolDown;
+  CLICK_COOL_DOWN: (state): number => {
+    return state.clickCoolDown;
   },
 };
 
@@ -72,7 +72,7 @@ export default {
     return state.problemHighlightTimer;
   },
   NEXT_CLICK_COOL_DOWN: (state) => {
-    return state.nextClickCoolDown;
+    return state.clickCoolDown;
   },
 };
 */

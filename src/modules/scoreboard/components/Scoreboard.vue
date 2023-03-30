@@ -25,7 +25,7 @@ import { defineComponent } from "vue";
 export default defineComponent({
   data() {
     return {
-      nextClickCoolDown: `${this.$store.getters["scoreboard/NEXT_CLICK_COOL_DOWN"]}ms`,
+      clickCoolDown: `${this.$store.getters["scoreboard/CLICK_COOL_DOWN"]}ms`,
     };
   },
   props: {
@@ -54,7 +54,7 @@ export default defineComponent({
 }
 
 .flip-list-move {
-  transition: transform v-bind(nextClickCoolDown) ease-in-out;
+  transition: transform v-bind(clickCoolDown) ease-in-out;
 }
 
 .scoreboard__current_contestant {

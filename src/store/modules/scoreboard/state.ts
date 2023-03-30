@@ -14,7 +14,7 @@ const state: ScoreboardState = {
     currentContestant: {} as Contestant,
     currentProblemIndex: -1,
     problemHighlightTimer: -1,
-    nextClickCoolDown: 1000,
+    clickCoolDown: 1000,
 };
 
 export default state;
