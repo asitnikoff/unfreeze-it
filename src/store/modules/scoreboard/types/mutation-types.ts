@@ -1,0 +1,9 @@
+export const CONTEST: string = 'CONTEST';
+export const PROBLEMS: string = 'PROBLEMS';
+export const CONTESTANTS: string = 'CONTESTANTS';
+export const SUBMISSIONS: string = 'SUBMISSIONS';
+export const VERDICTS: string = 'VERDICTS';
+export const CURRENT_PROBLEM: string = 'CURRENT_PROBLEM';
+export const CURRENT_CONTESTANT: string = 'CURRENT_CONTESTANT';
+export const CURRENT_PROBLEM_INDEX: string = 'CURRENT_PROBLEM_INDEX';
+export const PROBLEM_HIGHLIGHT_TIMER: string = 'PROBLEM_HIGHLIGHT_TIMER';
