@@ -17,7 +17,7 @@ const state: ScoreboardState = {
     currentProblem: {} as Problem,
     currentContestant: {} as Contestant,
     currentProblemIndex: -1,
-    problemHighlightTimer: -1,
+    // problemHighlightTimer: -1,
     clickCoolDown: 1000,
 };
 

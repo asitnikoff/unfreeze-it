@@ -32,9 +32,9 @@ const mutations: MutationTree<ScoreboardState> = {
     [ScoreboardMutationEnum.SET_CURRENT_PROBLEM_INDEX](state, payload: number)  {
         state.currentProblemIndex = payload;
     },
-    [ScoreboardMutationEnum.SET_PROBLEM_HIGHLIGHT_TIMER](state, payload: number) {
-        state.problemHighlightTimer = payload;
-    },
+    // [ScoreboardMutationEnum.SET_PROBLEM_HIGHLIGHT_TIMER](state, payload: number) {
+    //     state.problemHighlightTimer = payload;
+    // },
 }
 
 export default mutations;

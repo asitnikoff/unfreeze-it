@@ -32,9 +32,9 @@ const getters: GetterTree<ScoreboardState, any> = {
   [ScoreboardGetterEnum.GET_CURRENT_PROBLEM_INDEX](state): number  {
     return state.currentProblemIndex;
   },
-  [ScoreboardGetterEnum.GET_PROBLEM_HIGHLIGHT_TIMER](state): number {
-    return state.problemHighlightTimer;
-  },
+  // [ScoreboardGetterEnum.GET_PROBLEM_HIGHLIGHT_TIMER](state): number {
+  //   return state.problemHighlightTimer;
+  // },
   [ScoreboardGetterEnum.GET_CLICK_COOL_DOWN](state): number {
     return state.clickCoolDown;
   },

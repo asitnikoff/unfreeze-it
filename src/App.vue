@@ -196,6 +196,7 @@ export default defineComponent({
           ]
         );
       }
+      console.log(submission);
       let contestantTitle = submission!.contestantName;
       let contestantIndex = this.contestants.findIndex(
         (contestant: Contestant) => contestant.title === contestantTitle
@@ -267,6 +268,7 @@ export default defineComponent({
           this.banClickNext();
         }
       }
+      this.contestants[contestantIndex].problems[contestantProblemIndex].isPending = false;
     },
     banClickNext() {
       this.isTransitionAnimation = true;
@@ -283,7 +285,11 @@ export default defineComponent({
         this.currentContestantIndex
       ].problems.entries()) {
         if (problem.haveNextSubmission === true) {
+          // if (this.currentProblemIndex !== index && this.currentProblemIndex !== -1) {
+          //   this.contestants[this.currentContestantIndex].problems[this.currentProblemIndex].isPending = false;
+          // }
           this.currentProblemIndex = index;
+          this.contestants[this.currentContestantIndex].problems[this.currentProblemIndex].isPending = true;
           break;
         }
       }

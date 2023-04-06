@@ -61,6 +61,7 @@ export function getSolveContestants(): Array<Contestant> {
             incorrectAttempts: 0,
             lastSubmissionTime: 0,
             haveNextSubmission: false,
+            isPending: false,
           };
         }
       );

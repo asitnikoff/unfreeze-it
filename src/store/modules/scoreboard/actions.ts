@@ -9,13 +9,13 @@ import Submission from "@/modules/scoreboard/models/Submission";
 import Verdicts from "@/modules/scoreboard/models/Verdicts";
 
 const actions: ActionTree<ScoreboardState, any> = {
-  [ScoreboardActionEnum.CLEAR_PROBLEM_HIGHLIGHT_TIMER]({commit, getters}) {
-    clearInterval(getters.PROBLEM_HIGHLIGHT_TIMER);
-    commit(ScoreboardMutationEnum.SET_PROBLEM_HIGHLIGHT_TIMER, -1);
-  },
-  [ScoreboardActionEnum.SET_PROBLEM_HIGHLIGHT_TIMER]({commit}, payload: number) {
-    commit(ScoreboardMutationEnum.SET_PROBLEM_HIGHLIGHT_TIMER, payload);
-  },
+  // [ScoreboardActionEnum.CLEAR_PROBLEM_HIGHLIGHT_TIMER]({commit, getters}) {
+  //   clearInterval(getters.PROBLEM_HIGHLIGHT_TIMER);
+  //   commit(ScoreboardMutationEnum.SET_PROBLEM_HIGHLIGHT_TIMER, -1);
+  // },
+  // [ScoreboardActionEnum.SET_PROBLEM_HIGHLIGHT_TIMER]({commit}, payload: number) {
+  //   commit(ScoreboardMutationEnum.SET_PROBLEM_HIGHLIGHT_TIMER, payload);
+  // },
   [ScoreboardActionEnum.SET_CURRENT_CONTESTANT]({commit}, payload: Contestant) {
     commit(ScoreboardMutationEnum.SET_CURRENT_CONTESTANT, payload);
   },

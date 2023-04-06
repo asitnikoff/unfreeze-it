@@ -8,4 +8,5 @@ export default interface ContestantProblem {
   incorrectAttempts: number;
   lastSubmissionTime: number;
   haveNextSubmission: boolean;
+  isPending: boolean;
 }

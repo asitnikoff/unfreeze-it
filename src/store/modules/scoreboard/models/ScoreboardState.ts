@@ -13,6 +13,6 @@ export default interface ScoreboardState {
     currentProblem: Problem;
     currentContestant: Contestant;
     currentProblemIndex: number;
-    problemHighlightTimer: number;
+    // problemHighlightTimer: number;
     clickCoolDown: number;
 };

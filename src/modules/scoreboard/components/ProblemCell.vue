@@ -23,6 +23,7 @@ export default defineComponent({
   data() {
     return {
       isHighlighting: false,
+      highlightingTimer: -1 as unknown as ReturnType<typeof setInterval>,
     };
   },
   props: {
@@ -56,23 +57,17 @@ export default defineComponent({
     },
   },
   watch: {
-    currentProblem(newValue) {
-      if (
-        newValue.index === this.problem.index &&
-        this.$store.getters["scoreboard/CURRENT_CONTESTANT"].title ===
-          this.contestantTitle
-      ) {
-        if (this.isHighlighting === true) {
-          this.$store.dispatch(
-            "scoreboard/SET_PROBLEM_HIGHLIGHT_TIMER",
-            setInterval(() => {
-              this.isHighlighting = false;
-            }, 1000)
-          );
-        }
+    'problem.isPending'(newValue: Boolean) {
+      if (newValue == true) {
+        this.highlightingTimer = setInterval(() => {
+          this.isHighlighting = !this.isHighlighting;
+        }, 500);
+        console.log('start highlight');
       } else {
-        this.$store.dispatch("scoreboard/CLEAR_PROBLEM_HIGHLIGHT_TIMER");
+        clearInterval(this.highlightingTimer);
+        this.highlightingTimer = -1 as unknown as ReturnType<typeof setInterval>;
         this.isHighlighting = false;
+        console.log('end highlight');
       }
     },
   },
