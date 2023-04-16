@@ -57,17 +57,20 @@ export default defineComponent({
     },
   },
   watch: {
-    'problem.isPending'(newValue: Boolean) {
-      if (newValue == true) {
+    "problem.isPending"(newValue: boolean) {
+      console.log(`problem.isPending changed on ${newValue}`);
+      if (newValue) {
         this.highlightingTimer = setInterval(() => {
           this.isHighlighting = !this.isHighlighting;
         }, 500);
-        console.log('start highlight');
+        console.log("start highlight");
       } else {
         clearInterval(this.highlightingTimer);
-        this.highlightingTimer = -1 as unknown as ReturnType<typeof setInterval>;
+        this.highlightingTimer = -1 as unknown as ReturnType<
+          typeof setInterval
+        >;
         this.isHighlighting = false;
-        console.log('end highlight');
+        console.log("end highlight");
       }
     },
   },

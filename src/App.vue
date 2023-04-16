@@ -37,10 +37,12 @@ export default defineComponent({
   name: "app",
   data() {
     return {
-      currentContestantIndex: -1,
-      currentProblemIndex: -1,
-      allClicked: false,
-      isTransitionAnimation: false,
+      currentContestantIndex: -1 as number,
+      currentProblemIndex: -1 as number,
+      allClicked: false as boolean,
+      isTransitionAnimation: false as boolean,
+      isCurrentlyPending: false as boolean,
+      currentContestantProblem: {} as ContestantProblem,
     };
   },
   created() {
@@ -51,19 +53,47 @@ export default defineComponent({
     Scoreboard,
   },
   methods: {
+    setCurrentContestantProblem(value: ContestantProblem) {
+      this.currentContestantProblem = value;
+    },
     handleKeyPress(event: KeyboardEvent) {
       switch (event.key) {
         case "n":
-          if (this.isTransitionAnimation === true) {
+          console.log("next clicked");
+          if (
+            this.isTransitionAnimation === true ||
+            this.currentContestantIndex === -1
+          ) {
             break;
           }
+          console.log("next event is proceeding");
+          this.findNextProblem();
+          this.setCurrentProblem(
+            this.currentProblemIndex === -1
+              ? {}
+              : this.problems[this.currentProblemIndex]
+          );
+          this.setCurrentContestantProblem(
+            this.currentProblemIndex === -1 ||
+              this.currentContestantIndex === -1
+              ? {}
+              : this.contestants[this.currentContestantIndex].problems[
+                  this.currentProblemIndex
+                ]
+          );
           if (this.currentProblemIndex !== -1) {
             let contestant = this.contestants[this.currentContestantIndex];
             let submission = this.getNextSubmission(
               contestant,
               contestant.problems[this.currentProblemIndex]
             );
-            this.revealSubmission(submission);
+            if (this.isCurrentlyPending) {
+              this.isCurrentlyPending = false;
+              this.revealSubmission(submission);
+            } else {
+              this.isCurrentlyPending = true;
+              break;
+            }
             this.updateNextSubmission(
               contestant,
               contestant.problems[this.currentProblemIndex]
@@ -77,12 +107,6 @@ export default defineComponent({
                 : this.contestants[this.currentContestantIndex]
             );
           }
-          this.findNextProblem();
-          this.setCurrentProblem(
-            this.currentProblemIndex === -1
-              ? {}
-              : this.problems[this.currentProblemIndex]
-          );
           break;
         case "a":
           if (this.allClicked === false) {
@@ -163,7 +187,10 @@ export default defineComponent({
       this.shiftContestant();
       this.updateContestantsPosition();
     },
-    getNextSubmission(contestant: Contestant, contestantProblem: ContestantProblem) {
+    getNextSubmission(
+      contestant: Contestant,
+      contestantProblem: ContestantProblem
+    ) {
       return this.submissions.find((submission: Submission) => {
         return (
           submission.problemIndex === contestantProblem.index &&
@@ -196,7 +223,6 @@ export default defineComponent({
           ]
         );
       }
-      console.log(submission);
       let contestantTitle = submission!.contestantName;
       let contestantIndex = this.contestants.findIndex(
         (contestant: Contestant) => contestant.title === contestantTitle
@@ -268,7 +294,6 @@ export default defineComponent({
           this.banClickNext();
         }
       }
-      this.contestants[contestantIndex].problems[contestantProblemIndex].isPending = false;
     },
     banClickNext() {
       this.isTransitionAnimation = true;
@@ -289,7 +314,6 @@ export default defineComponent({
           //   this.contestants[this.currentContestantIndex].problems[this.currentProblemIndex].isPending = false;
           // }
           this.currentProblemIndex = index;
-          this.contestants[this.currentContestantIndex].problems[this.currentProblemIndex].isPending = true;
           break;
         }
       }
@@ -306,7 +330,7 @@ export default defineComponent({
       this.updateContestantsPosition();
       this.initNextSubmissions();
     },
-    ...mapActions('scoreboard', {
+    ...mapActions("scoreboard", {
       setCurrentContestant: ScoreboardActionEnum.SET_CURRENT_CONTESTANT,
       setCurrentProblem: ScoreboardActionEnum.SET_CURRENT_PROBLEM,
       setContest: ScoreboardActionEnum.SET_CONTEST,
@@ -317,7 +341,7 @@ export default defineComponent({
     }),
   },
   computed: {
-    ...mapGetters('scoreboard', {
+    ...mapGetters("scoreboard", {
       contest: ScoreboardGetterEnum.GET_CONTEST,
       contestants: ScoreboardGetterEnum.GET_CONTESTANTS,
       submissions: ScoreboardGetterEnum.GET_SUBMISSIONS,
@@ -325,6 +349,42 @@ export default defineComponent({
       verdicts: ScoreboardGetterEnum.GET_VERDICTS,
       clickCoolDown: ScoreboardGetterEnum.GET_CLICK_COOL_DOWN,
     }),
+    // currentContestantProblem(): ContestantProblem {
+    //   return this.contestants[this.currentContestantIndex].problems[
+    //     this.currentProblemIndex
+    //   ];
+    // },
+  },
+  watch: {
+    // currentProblemIndex(newValue: number, oldValue: number) {
+    //   console.log("currentProblemIndex changed");
+    //   if (newValue === -1) {
+    //     if (oldValue !== -1 && this.currentContestantIndex !== -1) {
+    //       this.contestants[this.currentContestantIndex].problems[
+    //         oldValue
+    //       ].isPending = false;
+    //       console.log("isPending false");
+    //     }
+    //   } else {
+    //     this.contestants[this.currentContestantIndex].problems[
+    //       newValue
+    //     ].isPending = true;
+    //     console.log("isPending true");
+    //   }
+    // },
+    isCurrentlyPending(newValue: boolean) {
+      console.log(`isCurrentlyPending changed on ${newValue}`);
+      if (!newValue) {
+        if (
+          this.currentProblemIndex !== -1 &&
+          this.currentContestantIndex !== -1
+        ) {
+          this.currentContestantProblem.isPending = false;
+        }
+      } else {
+        this.currentContestantProblem.isPending = true;
+      }
+    },
   },
 });
 </script>
