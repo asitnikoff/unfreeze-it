@@ -1,18 +1,20 @@
 <template>
   <div class="scoreboard">
     <Header class="scoreboard__header"></Header>
-    <TransitionGroup name="flip-list">
-      <TableRow
-        v-for="[index, contestant] in contestants.entries()"
-        :key="contestant.id"
-        :contestant="contestant"
-        class="scoreboard__row"
-        :class="{
-          scoreboard__current_contestant: currentContestantIndex === index,
-        }"
-        :contestType=contestType
-      ></TableRow>
-    </TransitionGroup>
+    <div class="contestants">
+      <TransitionGroup name="flip-list">
+        <TableRow
+          v-for="[index, contestant] in contestants.entries()"
+          :key="contestant.id"
+          :contestant="contestant"
+          class="scoreboard__row"
+          :class="{
+            scoreboard__current_contestant: currentContestantIndex === index,
+          }"
+          :contestType="contestType"
+        ></TableRow>
+      </TransitionGroup>
+    </div>
   </div>
 </template>
 
@@ -41,7 +43,7 @@ export default defineComponent({
     contestantMoveDuration() {
       return `${this.clickCoolDown}ms`;
     },
-    ...mapGetters('scoreboard', {
+    ...mapGetters("scoreboard", {
       contest: ScoreboardGetterEnum.GET_CONTEST,
       clickCoolDown: ScoreboardGetterEnum.GET_CLICK_COOL_DOWN,
       contestants: ScoreboardGetterEnum.GET_CONTESTANTS,
@@ -53,8 +55,16 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.contestants {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  margin-top: 40px;
+}
 .scoreboard__row {
-  margin-top: 10px;
+  /* height: 262px; */
+  padding: 20px 30px 30px;
+  border: 2px solid #345e5a;
 }
 
 .flip-list-move {
@@ -62,6 +72,6 @@ export default defineComponent({
 }
 
 .scoreboard__current_contestant {
-  border: 2px solid black;
+  border: 5px solid #345e5a;
 }
 </style>

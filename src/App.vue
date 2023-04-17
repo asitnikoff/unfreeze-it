@@ -34,6 +34,9 @@ import Problem from "@/modules/scoreboard/models/Problem";
 import ContestantProblem from "@/modules/scoreboard/models/ContestantProblem";
 
 export default defineComponent({
+  setup() {
+    document.title = "BSUIR Open XI. Scoreboard";
+  },
   name: "app",
   data() {
     return {
@@ -46,7 +49,7 @@ export default defineComponent({
     };
   },
   created() {
-    document.title = "Scoreboard";
+    // document.title = "Scoreboard";
     this.getContestData();
   },
   components: {
@@ -96,7 +99,7 @@ export default defineComponent({
             }
             this.updateNextSubmission(
               contestant,
-              contestant.problems[this.currentProblemIndex]
+              this.currentContestantProblem
             );
             this.updateScoreboard();
           } else {
@@ -218,9 +221,7 @@ export default defineComponent({
       if (submission === undefined) {
         submission = this.getNextSubmission(
           this.submissions,
-          this.contestants[this.currentContestantIndex].problems[
-            this.currentProblemIndex
-          ]
+          this.currentContestantProblem
         );
       }
       let contestantTitle = submission!.contestantName;
@@ -356,33 +357,29 @@ export default defineComponent({
     // },
   },
   watch: {
-    // currentProblemIndex(newValue: number, oldValue: number) {
-    //   console.log("currentProblemIndex changed");
-    //   if (newValue === -1) {
-    //     if (oldValue !== -1 && this.currentContestantIndex !== -1) {
-    //       this.contestants[this.currentContestantIndex].problems[
-    //         oldValue
-    //       ].isPending = false;
-    //       console.log("isPending false");
-    //     }
-    //   } else {
-    //     this.contestants[this.currentContestantIndex].problems[
-    //       newValue
-    //     ].isPending = true;
-    //     console.log("isPending true");
-    //   }
-    // },
-    isCurrentlyPending(newValue: boolean) {
-      console.log(`isCurrentlyPending changed on ${newValue}`);
-      if (!newValue) {
-        if (
-          this.currentProblemIndex !== -1 &&
-          this.currentContestantIndex !== -1
-        ) {
-          this.currentContestantProblem.isPending = false;
+    currentProblemIndex(newValue: number, oldValue: number) {
+      console.log("currentProblemIndex changed");
+      if (newValue === -1) {
+        if (oldValue !== -1 && this.currentContestantIndex !== -1) {
+          this.contestants[this.currentContestantIndex].problems[
+            oldValue
+          ].isCurrent = false;
+          console.log("isCurrent false");
         }
       } else {
+        this.contestants[this.currentContestantIndex].problems[
+          newValue
+        ].isCurrent = true;
+        console.log("isCurrent true");
+      }
+    },
+    isCurrentlyPending(newValue: boolean) {
+      if (!newValue) {
+        this.currentContestantProblem.isPending = false;
+        console.log(`isCurrentlyPending changed on false`);
+      } else {
         this.currentContestantProblem.isPending = true;
+        console.log(`isCurrentlyPending changed on true`);
       }
     },
   },
@@ -390,14 +387,84 @@ export default defineComponent({
 </script>
 
 <style>
+/* oswald-regular - cyrillic_latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Oswald";
+  font-style: normal;
+  font-weight: 400;
+  src: url("@/assets/fonts/oswald/oswald-v49-cyrillic_latin-regular.eot"); /* IE9 Compat Modes */
+  src: url("@/assets/fonts/oswald/oswald-v49-cyrillic_latin-regular.eot?#iefix")
+      format("embedded-opentype"),
+    /* IE6-IE8 */
+      url("@/assets/fonts/oswald/oswald-v49-cyrillic_latin-regular.woff2")
+      format("woff2"),
+    /* Super Modern Browsers */
+      url("@/assets/fonts/oswald/oswald-v49-cyrillic_latin-regular.woff")
+      format("woff"),
+    /* Modern Browsers */
+      url("@/assets/fonts/oswald/oswald-v49-cyrillic_latin-regular.ttf")
+      format("truetype"),
+    /* Safari, Android, iOS */
+      url("@/assets/fonts/oswald/oswald-v49-cyrillic_latin-regular.svg#Oswald")
+      format("svg"); /* Legacy iOS */
+}
+/* oswald-500 - cyrillic_latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Oswald";
+  font-style: normal;
+  font-weight: 500;
+  src: url("@/assets/fonts/oswald/oswald-v49-cyrillic_latin-500.eot"); /* IE9 Compat Modes */
+  src: url("@/assets/fonts/oswald/oswald-v49-cyrillic_latin-500.eot?#iefix")
+      format("embedded-opentype"),
+    /* IE6-IE8 */
+      url("@/assets/fonts/oswald/oswald-v49-cyrillic_latin-500.woff2")
+      format("woff2"),
+    /* Super Modern Browsers */
+      url("@/assets/fonts/oswald/oswald-v49-cyrillic_latin-500.woff")
+      format("woff"),
+    /* Modern Browsers */
+      url("@/assets/fonts/oswald/oswald-v49-cyrillic_latin-500.ttf")
+      format("truetype"),
+    /* Safari, Android, iOS */
+      url("@/assets/fonts/oswald/oswald-v49-cyrillic_latin-500.svg#Oswald")
+      format("svg"); /* Legacy iOS */
+}
+/* oswald-600 - cyrillic_latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Oswald";
+  font-style: normal;
+  font-weight: 600;
+  src: url("@/assets/fonts/oswald/oswald-v49-cyrillic_latin-600.eot"); /* IE9 Compat Modes */
+  src: url("@/assets/fonts/oswald/oswald-v49-cyrillic_latin-600.eot?#iefix")
+      format("embedded-opentype"),
+    /* IE6-IE8 */
+      url("@/assets/fonts/oswald/oswald-v49-cyrillic_latin-600.woff2")
+      format("woff2"),
+    /* Super Modern Browsers */
+      url("@/assets/fonts/oswald/oswald-v49-cyrillic_latin-600.woff")
+      format("woff"),
+    /* Modern Browsers */
+      url("@/assets/fonts/oswald/oswald-v49-cyrillic_latin-600.ttf")
+      format("truetype"),
+    /* Safari, Android, iOS */
+      url("@/assets/fonts/oswald/oswald-v49-cyrillic_latin-600.svg#Oswald")
+      format("svg"); /* Legacy iOS */
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: "Oswald", sans-serif;
+  font-size: 40px;
 }
 
 #app {
   padding: 10px;
+  background-color: #f3e1b8;
 }
 
 .app__scoreboard:focus {

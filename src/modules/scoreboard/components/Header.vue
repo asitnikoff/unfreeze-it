@@ -5,18 +5,6 @@
         {{ contest.title }}
       </div>
     </div>
-    <div class="header__body">
-      <div class="header__rank">Rank</div>
-      <div class="header__contestant_name">Name</div>
-      <div class="header__problems_title">Problems</div>
-      <template v-if="contest.type === 'ICPC'">
-        <div class="header__icpc">
-          <div class="header__solved">Solved</div>
-          <div class="header__penalty">Penalty</div>
-        </div>
-      </template>
-      <div class="header__points" v-if="contest.type === 'IOI'">Points</div>
-    </div>
   </div>
 </template>
 
@@ -27,7 +15,7 @@ import ScoreboardGetterEnum from "@/store/modules/scoreboard/types/getter-types"
 
 export default defineComponent({
   computed: {
-    ...mapGetters('scoreboard', {
+    ...mapGetters("scoreboard", {
       contest: ScoreboardGetterEnum.GET_CONTEST,
     }),
   },
@@ -46,7 +34,9 @@ export default defineComponent({
 }
 
 .header__contest_title {
-  font-weight: bold;
+  font-weight: 600;
+  font-size: 48px;
+  color: #dd430f;
 }
 
 .header__head {

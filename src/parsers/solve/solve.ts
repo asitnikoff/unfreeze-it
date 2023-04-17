@@ -9,7 +9,7 @@ import solveParticipants from "./solve-participants.js";
 import solveSolutions from "./solve-solutions.js";
 
 export const solveContest: Contest = {
-  title: "Computer Science Cup: Квалификация",
+  title: "BSUIR OPEN XI. Students finals",
   duration: 18000,
   freezeTime: 14400,
   type: "ICPC",
@@ -62,6 +62,7 @@ export function getSolveContestants(): Array<Contestant> {
             lastSubmissionTime: 0,
             haveNextSubmission: false,
             isPending: false,
+            isCurrent: false,
           };
         }
       );

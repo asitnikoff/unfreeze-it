@@ -1,16 +1,25 @@
 <template>
   <div
-    class="problem"
+    class="problem-box"
     :class="{
-      problem__solved: problem.solved === true,
-      problem__tried: problem.haveNextSubmission === true,
-      problem__no_attempt: problem.wasAttempt === false,
-      problem__first_accepted: problem.firstAccepted === true,
-      problem__highlight: isHighlighting,
+      'probem-current': problem.isCurrent && problem.haveNextSubmission,
     }"
   >
-    <div class="problem__text">
-      {{ getDisplayText() }}
+    <div class="problem-title">{{ problem.index }}</div>
+    <div
+      class="problem-data"
+      :class="{
+        problem__solved: problem.solved === true,
+        'problem__have-try': problem.haveNextSubmission === true,
+        'problem__no-attempt': problem.wasAttempt === false,
+        'problem__first-accepted': problem.firstAccepted === true,
+        problem__highlight: isHighlighting,
+        'problem__highlight-transition': problem.isPending,
+      }"
+    >
+      <div class="problem__text">
+        {{ getDisplayText() }}
+      </div>
     </div>
   </div>
 </template>
@@ -43,17 +52,26 @@ export default defineComponent({
   methods: {
     getDisplayText(): string {
       if (this.problem.wasAttempt === false) {
-        return `${this.problem.index}`;
+        return ".";
+      }
+      if (this.problem.solved) {
+        if (this.contestType === "ICPC") {
+          return `+${
+            this.problem.incorrectAttempts === 0
+              ? ""
+              : this.problem.incorrectAttempts
+          }`;
+        }
+      }
+      if (this.problem.haveNextSubmission === true) {
+        if (this.contestType === "ICPC") {
+          return `?${this.problem.incorrectAttempts + 1}`;
+        }
       }
       if (this.contestType === "ICPC") {
-        if (this.problem.haveNextSubmission === true) {
-          return `${this.problem.index} - ${
-            this.problem.incorrectAttempts + 1
-          }?`;
-        }
-        return `${this.problem.index} - ${this.problem.incorrectAttempts}`;
+        return `-${this.problem.incorrectAttempts}`;
       }
-      return `${this.problem.index} - ${this.problem.points}`;
+      return "something bad";
     },
   },
   watch: {
@@ -78,29 +96,52 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.problem {
-  background-color: #ff4848;
-  padding: 5px 10px;
-  border-radius: 20px;
+.problem-title {
+  color: #345e5a;
 }
-.problem__tried {
-  background-color: yellow;
+.problem-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  padding: 7px 8px;
+}
+.problem-data {
+  background-color: #dd430f;
+  padding: 2px 20px;
+  border-radius: 10px;
+  color: #f3e1b8;
+}
+.problem__have-try {
+  background-color: #eda96c;
 }
 
 .problem__solved {
-  background-color: #00c900;
+  background-color: #3c817a;
 }
 
-.problem__no_attempt {
-  background-color: gray;
+.problem__no-attempt {
+  background-color: #f3e1b8;
+  border: 3px solid #3c817a;
+  color: #3c817a;
 }
 
-.problem__first_accepted {
+.problem__first-accepted {
   background-color: #009700;
   border: 3px solid #ff0000;
 }
 
 .problem__highlight {
-  border: 3px solid #1900ff;
+  /* background-color: #e1893a; */
+  background-color: #c86d1e;
+}
+
+.probem-current {
+  border: 3px solid #3c817a;
+  border-radius: 15px;
+}
+
+.problem__highlight-transition {
+  transition: 500ms linear;
 }
 </style>
