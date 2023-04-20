@@ -5,6 +5,7 @@
       'probem-current': problem.isCurrent && problem.haveNextSubmission,
     }"
   >
+    <span v-if="problem.firstAccepted" class="problem__star"></span>
     <div class="problem-title">{{ problem.index }}</div>
     <div
       class="problem-data"
@@ -100,6 +101,7 @@ export default defineComponent({
   color: #345e5a;
 }
 .problem-box {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -107,6 +109,9 @@ export default defineComponent({
   padding: 7px 8px;
 }
 .problem-data {
+  width: 92px;
+  height: 63px;
+  text-align: center;
   background-color: #dd430f;
   padding: 2px 20px;
   border-radius: 10px;
@@ -126,9 +131,21 @@ export default defineComponent({
   color: #3c817a;
 }
 
+.problem__star {
+  display: inline-block;
+  background-image: url("@/assets/img/star.svg");
+  background-repeat: no-repeat;
+  width: 35px;
+  height: 35px;
+  top: 65px;
+  right: -7px;
+  z-index: 1;
+  position: absolute;
+}
+
 .problem__first-accepted {
-  background-color: #009700;
-  border: 3px solid #ff0000;
+  background-color: #3c817a;
+  /* border: 3px solid #ff0000; */
 }
 
 .problem__highlight {

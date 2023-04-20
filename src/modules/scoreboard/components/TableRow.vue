@@ -1,22 +1,31 @@
 <template>
   <div class="contestant">
-    <div class="contestant__rank">{{ contestant.position }}</div>
-    <div class="contestant__title">{{ contestant.title }}</div>
-    <div class="contestant__problems">
-      <ProblemCell
-        v-for="problem in contestant.problems"
-        :key="problem.index"
-        :problem="problem"
-        :contestantTitle="contestant.title"
-        :contestType="contestType"
-      ></ProblemCell>
+    <div class="rank contestant__rank">
+      <div class="rank__title">Rank</div>
+      <div class="rank__data">{{ contestant.position }}</div>
+    </div>
+    <div class="contestant__center">
+      <div class="contestant__title">{{ contestant.title }}</div>
+      <div class="contestant__problems">
+        <ProblemCell
+          v-for="problem in contestant.problems"
+          :key="problem.index"
+          :problem="problem"
+          :contestantTitle="contestant.title"
+          :contestType="contestType"
+        ></ProblemCell>
+      </div>
     </div>
     <template v-if="contestType === 'ICPC'">
       <div class="contestant__icpc">
-        <div class="contestant__solved_problems">
-          {{ contestant.totalSolved }}
+        <div class="solved_problems contestant__solved_problems">
+          <div class="solved_problems__title">Total</div>
+          <div class="solved_problem__data">{{ contestant.totalSolved }}</div>
         </div>
-        <div class="contestant__penalty">{{ contestant.penalty }}</div>
+        <div class="penalty contestant__penalty">
+          <div class="penalty__title">Penalty</div>
+          <div class="penalty__data">{{ contestant.penalty }}</div>
+        </div>
       </div>
     </template>
     <div class="contestant__points" v-if="contestType === 'IOI'">Points</div>
@@ -26,7 +35,7 @@
 <script lang="ts">
 import ProblemCell from "@/modules/scoreboard/components/ProblemCell.vue";
 import Contestant from "@/modules/scoreboard/models/Contestant";
-import {defineComponent, type PropType} from "vue";
+import { defineComponent, type PropType } from "vue";
 
 export default defineComponent({
   components: {
@@ -47,26 +56,39 @@ export default defineComponent({
 </script>
 
 <style scoped>
+* {
+  color: #345e5a;
+}
+.contestant__rank {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+}
+.contestant__center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: auto;
+  flex-grow: 1;
+}
+
 .contestant {
   display: flex;
   gap: 10px;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.contestant__rank {
-  width: 2%;
-  text-align: center;
-}
-
-.contestant__title {
-  width: 10%;
+.rank__data {
+  margin-top: 20px;
 }
 
 .contestant__problems {
-  width: 82%;
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
+  gap: 20px;
 }
 
 .contestant__problem {
@@ -85,6 +107,18 @@ export default defineComponent({
   justify-content: center;
   align-items: center;
   gap: 30px;
-  width: 5.5%;
+}
+
+.contestant__penalty {
+  margin-right: 40px;
+  margin-left: 20px;
+}
+
+.penalty__data {
+  margin-top: 20px;
+}
+
+.solved_problem__data {
+  margin-top: 20px;
 }
 </style>

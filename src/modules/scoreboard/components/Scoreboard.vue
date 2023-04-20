@@ -26,15 +26,48 @@ import { defineComponent } from "vue";
 import ScoreboardGetterEnum from "@/store/modules/scoreboard/types/getter-types";
 
 export default defineComponent({
+  name: "scoreboard",
   props: {
     currentContestantIndex: {
       type: Number,
+      required: true,
+    },
+    isAccepted: {
+      type: Boolean,
       required: true,
     },
   },
   components: {
     TableRow,
     Header,
+  },
+  mounted() {},
+  methods: {
+    scrollToCurrentContestant(currentContestantIndex: number) {
+      console.log("scrollToCurrentContestant is triggered");
+      console.log(
+        `current contestant title is ${
+          currentContestantIndex === -1
+            ? "undefined"
+            : this.contestants[currentContestantIndex].title
+        }`
+      );
+      let element: any = undefined;
+      const contestantIndexToScroll = Math.max(-1, currentContestantIndex - 1);
+      if (contestantIndexToScroll === -1) {
+        element = document.getElementsByClassName("scoreboard__header")[0];
+      } else {
+        element =
+          document.getElementsByClassName("scoreboard__row")[
+            contestantIndexToScroll
+          ];
+      }
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      } else {
+        console.error(`${element} not found`);
+      }
+    },
   },
   computed: {
     contestType() {
@@ -50,6 +83,13 @@ export default defineComponent({
       currentContestant: ScoreboardGetterEnum.GET_CURRENT_CONTESTANT,
       currentProblem: ScoreboardGetterEnum.GET_CURRENT_PROBLEM,
     }),
+  },
+  watch: {
+    currentContestantIndex(newValue: number, oldValue: number) {
+      if (newValue !== -1) {
+        this.scrollToCurrentContestant(newValue);
+      }
+    },
   },
 });
 </script>

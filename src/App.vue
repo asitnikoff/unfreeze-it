@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <Scoreboard
+      ref="scoreboard"
       class="app__scoreboard"
       @keydown="handleKeyPress"
       tabindex="0"
@@ -11,6 +12,7 @@
       :currentProblem="
         currentProblemIndex === -1 ? {} : problems[currentProblemIndex]
       "
+      :isAccepted="isAccepted"
     ></Scoreboard>
   </div>
 </template>
@@ -46,11 +48,16 @@ export default defineComponent({
       isTransitionAnimation: false as boolean,
       isCurrentlyPending: false as boolean,
       currentContestantProblem: {} as ContestantProblem,
+      isAccepted: false as boolean,
+      isBanClickNext: false as boolean,
     };
   },
   created() {
     // document.title = "Scoreboard";
     this.getContestData();
+  },
+  mounted() {
+    // this.scrollToCurrentContestant();
   },
   components: {
     Scoreboard,
@@ -62,13 +69,20 @@ export default defineComponent({
     handleKeyPress(event: KeyboardEvent) {
       switch (event.key) {
         case "n":
+          this.isAccepted = false;
           console.log("next clicked");
           if (
             this.isTransitionAnimation === true ||
+            this.isBanClickNext === true ||
             this.currentContestantIndex === -1
           ) {
             break;
           }
+          // this.isBanClickNext = true;
+          // setTimeout(() => {
+          //   this.isBanClickNext = false;
+          //   console.log("ban on next click is false");
+          // }, 100);
           console.log("next event is proceeding");
           this.findNextProblem();
           this.setCurrentProblem(
@@ -93,6 +107,10 @@ export default defineComponent({
             if (this.isCurrentlyPending) {
               this.isCurrentlyPending = false;
               this.revealSubmission(submission);
+              if (this.isAccepted) {
+                this.banClickNext();
+                this.isAccepted = false;
+              }
             } else {
               this.isCurrentlyPending = true;
               break;
@@ -101,7 +119,6 @@ export default defineComponent({
               contestant,
               this.currentContestantProblem
             );
-            this.updateScoreboard();
           } else {
             this.currentContestantIndex--;
             this.setCurrentContestant(
@@ -133,12 +150,27 @@ export default defineComponent({
             contestant,
             contestant.problems[this.currentProblemIndex]
           );
-          this.updateScoreboard();
         } else {
           this.currentContestantIndex--;
         }
         this.findNextProblem();
       }
+      console.log(
+        `after revealAll contestant index equals ${this.currentContestantIndex}`
+      );
+      this.scrollToCurrentContestant();
+    },
+    scrollToCurrentContestant() {
+      setTimeout(() => {
+        if (this.$refs["scoreboard"] !== undefined) {
+          console.log(
+            "trigger scrollToCurrentContestant from updateScoreboard"
+          );
+          (this.$refs["scoreboard"] as any).scrollToCurrentContestant(
+            this.currentContestantIndex
+          );
+        }
+      }, 100);
     },
     getScoreboardBeforeFreeze() {
       for (let submission of this.submissions) {
@@ -181,14 +213,17 @@ export default defineComponent({
             this.contestants[i],
             this.contestants[i - 1],
           ];
+          --i;
+        } else {
+          break;
         }
-        --i;
       }
     },
     updateScoreboard() {
       // this.sortContestantsICPC();
       this.shiftContestant();
       this.updateContestantsPosition();
+      // console.log(this.$refs["scoreboard"] as Object);
     },
     getNextSubmission(
       contestant: Contestant,
@@ -291,13 +326,16 @@ export default defineComponent({
               contestantProblemIndex
             ].penalty;
           this.contestants[contestantIndex].totalSolved++;
-
-          this.banClickNext();
+          this.isAccepted = true;
+          this.updateScoreboard();
         }
       }
     },
     banClickNext() {
       this.isTransitionAnimation = true;
+
+      this.scrollToCurrentContestant();
+
       setTimeout(() => {
         this.isTransitionAnimation = false;
       }, this.clickCoolDown + 100);
@@ -460,6 +498,10 @@ export default defineComponent({
   box-sizing: border-box;
   font-family: "Oswald", sans-serif;
   font-size: 40px;
+}
+
+*::-webkit-scrollbar {
+  display: none;
 }
 
 #app {
