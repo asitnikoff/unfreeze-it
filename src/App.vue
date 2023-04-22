@@ -110,6 +110,7 @@ export default defineComponent({
               if (this.isAccepted) {
                 this.banClickNext();
                 this.isAccepted = false;
+                this.currentContestantProblem.isAcceptedAfterFreeze = true;
               }
             } else {
               this.isCurrentlyPending = true;
@@ -128,12 +129,12 @@ export default defineComponent({
             );
           }
           break;
-        case "a":
-          if (this.allClicked === false) {
-            this.allClicked = true;
-            this.revealAll();
-          }
-          break;
+        //   case "a":
+        //     if (this.allClicked === false) {
+        //       this.allClicked = true;
+        //       this.revealAll();
+        //     }
+        //     break;
       }
     },
     revealAll() {

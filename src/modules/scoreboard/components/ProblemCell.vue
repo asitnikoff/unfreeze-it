@@ -16,6 +16,7 @@
         'problem__first-accepted': problem.firstAccepted === true,
         problem__highlight: isHighlighting,
         'problem__highlight-transition': problem.isPending,
+        'problem__accepted-after-freeze': problem.isAcceptedAfterFreeze,
       }"
     >
       <div class="problem__text">
@@ -160,5 +161,9 @@ export default defineComponent({
 
 .problem__highlight-transition {
   transition: 500ms linear;
+}
+
+.problem__accepted-after-freeze {
+  outline: 7px dashed #3c817a;
 }
 </style>

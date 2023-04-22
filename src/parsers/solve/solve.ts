@@ -11,7 +11,7 @@ import solveSolutions from "./solve-solutions.js";
 export const solveContest: Contest = {
   title: "BSUIR OPEN XI. Students finals",
   duration: 18000,
-  freezeTime: 14400,
+  freezeTime: 3000,
   type: "ICPC",
   penalty: 20,
 };
@@ -27,7 +27,7 @@ export const solveVerdicts: Verdicts = {
   withoutPenalty: ["compilation_error"],
 };
 
-const startTime: number = 1677924000;
+const startTime: number = 1682147700;
 
 export function getSolveProblems(): Array<Problem> {
   return solveProblems
@@ -63,6 +63,7 @@ export function getSolveContestants(): Array<Contestant> {
             haveNextSubmission: false,
             isPending: false,
             isCurrent: false,
+            isAcceptedAfterFreeze: false,
           };
         }
       );

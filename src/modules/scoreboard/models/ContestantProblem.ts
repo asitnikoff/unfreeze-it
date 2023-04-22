@@ -10,4 +10,5 @@ export default interface ContestantProblem {
   haveNextSubmission: boolean;
   isPending: boolean;
   isCurrent: boolean;
+  isAcceptedAfterFreeze: boolean;
 }
