@@ -11,7 +11,7 @@ import solveSolutions from "./solve-solutions.js";
 export const solveContest: Contest = {
   title: "BSUIR OPEN XI. Students finals",
   duration: 18000,
-  freezeTime: 3000,
+  freezeTime: 14400,
   type: "ICPC",
   penalty: 20,
 };

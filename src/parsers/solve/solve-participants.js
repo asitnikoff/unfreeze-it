@@ -1,41 +1,5 @@
 export default [
   {
-    id: 39,
-    user: { id: 8, login: "Vadimohka" },
-    contest_id: 6,
-    kind: "manager",
-  },
-  {
-    id: 1412,
-    scope_user: {
-      id: 1094,
-      login: "bsuir-xi-5098B1",
-      title: "[TUIT] Algo Experts",
-    },
-    contest_id: 6,
-    kind: "regular",
-  },
-  {
-    id: 1417,
-    scope_user: {
-      id: 1099,
-      login: "bsuir-xi-au1",
-      title: "[AU*] Baby stop WAWAing",
-    },
-    contest_id: 6,
-    kind: "regular",
-  },
-  {
-    id: 1418,
-    scope_user: {
-      id: 1100,
-      login: "bsuir-xi-khnure1",
-      title: "[KhNURE*] KIVI",
-    },
-    contest_id: 6,
-    kind: "regular",
-  },
-  {
     id: 1393,
     scope_user: { id: 1075, login: "bsuir-xi-BCFD70", title: "[MAI] plop" },
     contest_id: 6,
@@ -98,36 +62,6 @@ export default [
     kind: "regular",
   },
   {
-    id: 1391,
-    scope_user: {
-      id: 1073,
-      login: "bsuir-xi-BC3B7E",
-      title: "[HSE] hamster x hamster",
-    },
-    contest_id: 6,
-    kind: "regular",
-  },
-  {
-    id: 1394,
-    scope_user: {
-      id: 1076,
-      login: "bsuir-xi-C0A118",
-      title: "[NSU] MathWay",
-    },
-    contest_id: 6,
-    kind: "regular",
-  },
-  {
-    id: 1404,
-    scope_user: {
-      id: 1086,
-      login: "bsuir-xi-738290",
-      title: "[BSU] Medium rare",
-    },
-    contest_id: 6,
-    kind: "regular",
-  },
-  {
     id: 1419,
     scope_user: {
       id: 1101,
@@ -174,27 +108,31 @@ export default [
     kind: "regular",
   },
   {
-    id: 1406,
-    scope_user: { id: 1088, login: "bsuir-xi-D6E9CD", title: "[SPbSU] 25" },
-    contest_id: 6,
-    kind: "regular",
-  },
-  {
-    id: 1409,
+    id: 1391,
     scope_user: {
-      id: 1091,
-      login: "bsuir-xi-F61755",
-      title: "[SPbSU] Urgant Team",
+      id: 1073,
+      login: "bsuir-xi-BC3B7E",
+      title: "[HSE] hamster x hamster",
     },
     contest_id: 6,
     kind: "regular",
   },
   {
-    id: 1410,
+    id: 1394,
     scope_user: {
-      id: 1092,
-      login: "bsuir-xi-388F15",
-      title: "[TUIT] Code of Duty",
+      id: 1076,
+      login: "bsuir-xi-C0A118",
+      title: "[NSU] MathWay",
+    },
+    contest_id: 6,
+    kind: "regular",
+  },
+  {
+    id: 1404,
+    scope_user: {
+      id: 1086,
+      login: "bsuir-xi-738290",
+      title: "[BSU] Medium rare",
     },
     contest_id: 6,
     kind: "regular",
@@ -240,31 +178,27 @@ export default [
     kind: "regular",
   },
   {
-    id: 1401,
+    id: 1406,
+    scope_user: { id: 1088, login: "bsuir-xi-D6E9CD", title: "[SPbSU] 25" },
+    contest_id: 6,
+    kind: "regular",
+  },
+  {
+    id: 1409,
     scope_user: {
-      id: 1083,
-      login: "bsuir-xi-1E7A6D",
-      title: "[MAI] MAI Zaytsev's last hope",
+      id: 1091,
+      login: "bsuir-xi-F61755",
+      title: "[SPbSU] Urgant Team",
     },
     contest_id: 6,
     kind: "regular",
   },
   {
-    id: 1403,
+    id: 1410,
     scope_user: {
-      id: 1085,
-      login: "bsuir-xi-7E40A5",
-      title: "[MEPHI] Useless but powerfull",
-    },
-    contest_id: 6,
-    kind: "regular",
-  },
-  {
-    id: 1405,
-    scope_user: {
-      id: 1087,
-      login: "bsuir-xi-EDD74A",
-      title: "[Innopolis U] WW",
+      id: 1092,
+      login: "bsuir-xi-388F15",
+      title: "[TUIT] Code of Duty",
     },
     contest_id: 6,
     kind: "regular",
@@ -312,6 +246,36 @@ export default [
     kind: "regular",
   },
   {
+    id: 1401,
+    scope_user: {
+      id: 1083,
+      login: "bsuir-xi-1E7A6D",
+      title: "[MAI] MAI Zaytsev's last hope",
+    },
+    contest_id: 6,
+    kind: "regular",
+  },
+  {
+    id: 1403,
+    scope_user: {
+      id: 1085,
+      login: "bsuir-xi-7E40A5",
+      title: "[MEPHI] Useless but powerfull",
+    },
+    contest_id: 6,
+    kind: "regular",
+  },
+  {
+    id: 1405,
+    scope_user: {
+      id: 1087,
+      login: "bsuir-xi-EDD74A",
+      title: "[Innopolis U] WW",
+    },
+    contest_id: 6,
+    kind: "regular",
+  },
+  {
     id: 1379,
     user: { id: 1, login: "wilcot" },
     contest_id: 6,
@@ -348,26 +312,6 @@ export default [
     kind: "regular",
   },
   {
-    id: 1400,
-    scope_user: {
-      id: 1082,
-      login: "bsuir-xi-8060E7",
-      title: "[BSUIR] Selamat Pagi, Pizza",
-    },
-    contest_id: 6,
-    kind: "regular",
-  },
-  {
-    id: 1408,
-    scope_user: {
-      id: 1090,
-      login: "bsuir-xi-C1318F",
-      title: "[BSU] Dungeon Thread",
-    },
-    contest_id: 6,
-    kind: "regular",
-  },
-  {
     id: 1372,
     user: { id: 12, login: "dfs1001101" },
     contest_id: 6,
@@ -391,6 +335,62 @@ export default [
       id: 1069,
       login: "bsuir-xi-2F3EEF",
       title: "[MIPT] MIPT G?ys",
+    },
+    contest_id: 6,
+    kind: "regular",
+  },
+  {
+    id: 1400,
+    scope_user: {
+      id: 1082,
+      login: "bsuir-xi-8060E7",
+      title: "[BSUIR] Selamat Pagi, Pizza",
+    },
+    contest_id: 6,
+    kind: "regular",
+  },
+  {
+    id: 1408,
+    scope_user: {
+      id: 1090,
+      login: "bsuir-xi-C1318F",
+      title: "[BSU] Dungeon Thread",
+    },
+    contest_id: 6,
+    kind: "regular",
+  },
+  {
+    id: 39,
+    user: { id: 8, login: "Vadimohka" },
+    contest_id: 6,
+    kind: "manager",
+  },
+  {
+    id: 1412,
+    scope_user: {
+      id: 1094,
+      login: "bsuir-xi-5098B1",
+      title: "[TUIT] Algo Experts",
+    },
+    contest_id: 6,
+    kind: "regular",
+  },
+  {
+    id: 1417,
+    scope_user: {
+      id: 1099,
+      login: "bsuir-xi-au1",
+      title: "[AU*] Baby stop WAWAing",
+    },
+    contest_id: 6,
+    kind: "regular",
+  },
+  {
+    id: 1418,
+    scope_user: {
+      id: 1100,
+      login: "bsuir-xi-khnure1",
+      title: "[KhNURE*] KIVI",
     },
     contest_id: 6,
     kind: "regular",

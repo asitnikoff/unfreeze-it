@@ -64,7 +64,11 @@ export default defineComponent({
   },
   methods: {
     setCurrentContestantProblem(value: ContestantProblem) {
+      if (this.currentContestantProblem.index !== value.index) {
+        this.currentContestantProblem.isCurrent = false;
+      }
       this.currentContestantProblem = value;
+      this.currentContestantProblem.isCurrent = true;
     },
     handleKeyPress(event: KeyboardEvent) {
       switch (event.key) {
@@ -397,20 +401,20 @@ export default defineComponent({
   },
   watch: {
     currentProblemIndex(newValue: number, oldValue: number) {
-      console.log("currentProblemIndex changed");
-      if (newValue === -1) {
-        if (oldValue !== -1 && this.currentContestantIndex !== -1) {
-          this.contestants[this.currentContestantIndex].problems[
-            oldValue
-          ].isCurrent = false;
-          console.log("isCurrent false");
-        }
-      } else {
-        this.contestants[this.currentContestantIndex].problems[
-          newValue
-        ].isCurrent = true;
-        console.log("isCurrent true");
-      }
+      // console.log("currentProblemIndex changed");
+      // if (newValue === -1) {
+      //   if (oldValue !== -1 && this.currentContestantIndex !== -1) {
+      //     this.contestants[this.currentContestantIndex].problems[
+      //       oldValue
+      //     ].isCurrent = false;
+      //     console.log("isCurrent false");
+      //   }
+      // } else {
+      //   this.contestants[this.currentContestantIndex].problems[
+      //     newValue
+      //   ].isCurrent = true;
+      //   console.log("isCurrent true");
+      // }
     },
     isCurrentlyPending(newValue: boolean) {
       if (!newValue) {

@@ -110,7 +110,7 @@ export default defineComponent({
   padding: 7px 8px;
 }
 .problem-data {
-  width: 92px;
+  width: 100px;
   height: 63px;
   text-align: center;
   background-color: #dd430f;
