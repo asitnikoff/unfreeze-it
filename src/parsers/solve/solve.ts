@@ -27,7 +27,7 @@ export const solveVerdicts: Verdicts = {
   withoutPenalty: ["compilation_error"],
 };
 
-const startTime: number = 1682147700;
+const startTime: number = 1682752800;
 
 export function getSolveProblems(): Array<Problem> {
   return solveProblems
@@ -40,6 +40,37 @@ export function getSolveProblems(): Array<Problem> {
       };
     })
     .filter((problem) => problem !== undefined);
+}
+
+function getAttemptsUntilAccept(
+  problemCode: string,
+  participant: string
+): number {
+  solveSolutions.sort((a, b) => a.create_time - b.create_time);
+  let solved: boolean = false;
+  return solveSolutions.filter((solution) => {
+    if (solution.problem.code !== problemCode || solved) {
+      return false;
+    }
+
+    if (solution.participant.kind !== "regular") {
+      return false;
+    }
+
+    if (solution.participant.scope_user!.title !== participant) {
+      return false;
+    }
+
+    if (solution.report.verdict === "compilation_error") {
+      return false;
+    }
+
+    if (solution.report.verdict === "accepted") {
+      solved = true;
+    }
+
+    return true;
+  }).length;
 }
 
 export function getSolveContestants(): Array<Contestant> {
@@ -64,6 +95,10 @@ export function getSolveContestants(): Array<Contestant> {
             isPending: false,
             isCurrent: false,
             isAcceptedAfterFreeze: false,
+            attemptsUntilAccept: getAttemptsUntilAccept(
+              problem.code,
+              participant!.scope_user!.title
+            ),
           };
         }
       );

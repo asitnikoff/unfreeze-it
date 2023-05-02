@@ -133,12 +133,12 @@ export default defineComponent({
             );
           }
           break;
-        //   case "a":
-        //     if (this.allClicked === false) {
-        //       this.allClicked = true;
-        //       this.revealAll();
-        //     }
-        //     break;
+        // case "a":
+        //   if (this.allClicked === false) {
+        //     this.allClicked = true;
+        //     this.revealAll();
+        //   }
+        //   break;
       }
     },
     revealAll() {

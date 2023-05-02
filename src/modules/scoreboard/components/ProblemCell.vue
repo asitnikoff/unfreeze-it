@@ -6,7 +6,14 @@
     }"
   >
     <span v-if="problem.firstAccepted" class="problem__star"></span>
-    <div class="problem-title">{{ problem.index }}</div>
+    <div class="problem-title">
+      <span class="problem-title__code">
+        {{ problem.index }}
+      </span>
+      <span v-if="problem.haveNextSubmission" class="problem-title__attempts">
+        ({{ problem.attemptsUntilAccept - problem.incorrectAttempts - 1 }})
+      </span>
+    </div>
     <div
       class="problem-data"
       :class="{
@@ -98,6 +105,10 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.problem-title__attempts {
+  margin-left: 1px;
+  font-size: 28px;
+}
 .problem-title {
   color: #345e5a;
 }

@@ -11,4 +11,5 @@ export default interface ContestantProblem {
   isPending: boolean;
   isCurrent: boolean;
   isAcceptedAfterFreeze: boolean;
+  attemptsUntilAccept: number;
 }
